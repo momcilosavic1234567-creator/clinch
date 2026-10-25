@@ -674,7 +674,7 @@ export default function Home() {
                   ["Agency & sender", "Cover, signature, and reply-to."],
                   ["Accent & logo", "Hex accent plus a sanitised raster logo."],
                   ["Booking link", "Your calendar, in every email."],
-                  ["Shareable dossier", "A private URL you can send as-is."],
+                  ["PDF handoff", "A print-ready A4 file you can send as-is."],
                 ].map(([title, detail]) => (
                   <li key={title}>
                     <p className="flex items-center gap-2 text-sm font-medium">

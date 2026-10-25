@@ -11,29 +11,23 @@ export function AuditFallback({ id }: { id: string }) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    let found = false;
     try {
       const raw = window.localStorage.getItem(`clinch:audit:${id}`);
       if (raw) {
         const parsed = JSON.parse(raw) as Audit;
         if (parsed && parsed.version === 1 && parsed.id === id) {
-          found = true;
           setAudit(parsed);
-          document.title = `Prospect audit — ${parsed.target.host}`;
         }
       }
     } catch {
       // Ignore corrupt or blocked storage and show the expiry message.
-    }
-    if (!found) {
-      document.title = "Dossier not found — Clinch";
     }
     setChecked(true);
   }, [id]);
 
   if (audit) {
     return (
-      <DossierView audit={audit} isSample={id === "sample"} />
+      <DossierView audit={audit} isSample={id === "sample"} browserOnly />
     );
   }
 

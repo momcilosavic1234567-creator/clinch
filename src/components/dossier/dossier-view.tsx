@@ -20,9 +20,11 @@ type View = "dossier" | "pitch";
 export function DossierView({
   audit,
   isSample = false,
+  browserOnly = false,
 }: {
   audit: Audit;
   isSample?: boolean;
+  browserOnly?: boolean;
 }) {
   const [view, setView] = useState<View>("dossier");
   const [linkState, setLinkState] = useState<"idle" | "copied" | "failed">(
@@ -149,7 +151,12 @@ export function DossierView({
               type="button"
               onClick={copyLink}
               className="flex items-center gap-1.5 border border-line px-2.5 py-2 font-mono text-[10px] uppercase tracking-[0.1em] text-bone/65 transition hover:border-bone/40 hover:text-bone"
-              aria-label="Copy share link"
+              aria-label={browserOnly ? "Copy local link" : "Copy share link"}
+              title={
+                browserOnly
+                  ? "This audit is stored in this browser. Send the PDF to share it."
+                  : undefined
+              }
             >
               {linkState === "copied" ? (
                 <Check className="size-3.5" aria-hidden />
@@ -158,10 +165,14 @@ export function DossierView({
               )}
               <span className="hidden lg:inline" aria-live="polite">
                 {linkState === "copied"
-                  ? "Copied"
+                  ? browserOnly
+                    ? "Copied · local"
+                    : "Copied"
                   : linkState === "failed"
                     ? "Failed"
-                    : "Copy link"}
+                    : browserOnly
+                      ? "Local link"
+                      : "Copy link"}
               </span>
             </button>
             <button
@@ -210,7 +221,11 @@ export function DossierView({
             <div className="no-print mx-auto mb-4 flex max-w-[210mm] flex-wrap items-end justify-between gap-2 px-1">
               <div>
                 <p className="kicker text-signal">
-                  {isSample ? "Sample dossier" : "Saved audit"}
+                  {isSample
+                    ? "Sample dossier"
+                    : browserOnly
+                      ? "Browser copy"
+                      : "Saved audit"}
                 </p>
                 <p className="mt-1 text-xs text-bone/55">
                   {audit.target.host} · {audit.stats.issuesFound} findings ·{" "}
