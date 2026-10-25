@@ -9,7 +9,9 @@ Clinch turns a prospect's public website into a white-label audit dossier, a 30/
 
 Built for web agencies that prospect with cold email and need to sound like they already did the work.
 
-[**Live demo →**](https://clinch-audit.vercel.app) · [**Open the sample dossier →**](docs/sample-audit.pdf)
+[**Live demo →**](https://clinch-audit.vercel.app) · [**Open the sample dossier →**](docs/sample-audit.pdf) · [**Hire me to run five audits →**](https://clinch-audit.vercel.app/for-agencies)
+
+For agencies that want the output without running the tool: [the five-dossier pilot](https://clinch-audit.vercel.app/for-agencies) is €300 fixed, delivered in 48 hours, white-label.
 
 ![Clinch landing page](docs/screenshot-landing.png)
 

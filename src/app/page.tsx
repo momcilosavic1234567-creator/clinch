@@ -16,6 +16,7 @@ import {
 import { AuditForm } from "@/components/audit-form";
 import sampleJson from "@/data/sample-audit.json";
 import type { Audit } from "@/lib/audit/types";
+import { mailtoHref } from "@/lib/contact";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -127,17 +128,27 @@ export default function Home() {
             {[
               ["What you get", "#what"],
               ["How it works", "#how"],
-              ["The engine", "#engine"],
+              ["For agencies", "/for-agencies"],
               ["Sample dossier", "#sample"],
-            ].map(([label, href]) => (
-              <a
-                key={href}
-                href={href}
-                className="text-xs text-bone/60 transition hover:text-signal"
-              >
-                {label}
-              </a>
-            ))}
+            ].map(([label, href]) =>
+              href.startsWith("#") ? (
+                <a
+                  key={href}
+                  href={href}
+                  className="text-xs text-bone/60 transition hover:text-signal"
+                >
+                  {label}
+                </a>
+              ) : (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-xs text-bone/60 transition hover:text-signal"
+                >
+                  {label}
+                </Link>
+              ),
+            )}
           </nav>
           <a
             href="#audit"
@@ -773,6 +784,57 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="border-b border-line bg-bone text-ink">
+          <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:px-10 lg:py-20">
+            <div>
+              <p className="kicker text-ink/55">Done for you</p>
+              <h2 className="display mt-4 max-w-2xl text-balance text-4xl sm:text-5xl">
+                Clinch is the engine. I can run it for you.
+              </h2>
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-ink/65">
+                Send five prospect URLs and your brand details. In 48 hours you
+                get five white-label dossiers and the outreach to send them —
+                reviewed by me, delivered under your name.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/for-agencies"
+                  className="group inline-flex items-center gap-2 bg-ink px-5 py-3 text-sm text-bone transition hover:bg-ink-raised"
+                >
+                  See the agency pilot
+                  <ArrowRight
+                    className="size-4 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden
+                  />
+                </Link>
+                <a
+                  href={mailtoHref("Question about the Clinch agency pilot")}
+                  className="inline-flex items-center gap-2 border border-ink/25 px-5 py-3 text-sm text-ink/75 transition hover:border-ink/60 hover:text-ink"
+                >
+                  <Mail className="size-4" aria-hidden />
+                  Ask a question
+                </a>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-px border border-ink/20 bg-ink/15">
+              {[
+                ["05", "dossiers"],
+                ["48h", "turnaround"],
+                ["€300", "fixed fee"],
+              ].map(([value, label]) => (
+                <div key={label} className="bg-bone p-4 sm:p-5">
+                  <p className="display text-3xl leading-none sm:text-4xl">
+                    {value}
+                  </p>
+                  <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] text-ink/50">
+                    {label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="border-b border-line">
           <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 lg:grid-cols-[0.7fr_1.3fr] lg:px-10 lg:py-20">
             <h2 className="display text-balance text-3xl sm:text-4xl">
@@ -827,9 +889,9 @@ export default function Home() {
               <a href="#how" className="transition hover:text-signal">
                 Workflow
               </a>
-              <a href="#engine" className="transition hover:text-signal">
-                Engine
-              </a>
+              <Link href="/for-agencies" className="transition hover:text-signal">
+                For agencies
+              </Link>
               <Link href="/audit/sample" className="transition hover:text-signal">
                 Sample dossier
               </Link>
