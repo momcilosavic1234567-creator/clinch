@@ -1,0 +1,949 @@
+{
+  "version": 1,
+  "id": "sample",
+  "createdAt": "2026-10-25T09:12:00.000Z",
+  "durationMs": 9674,
+  "target": {
+    "inputUrl": "https://northwinddental.example",
+    "url": "https://northwinddental.example/",
+    "finalUrl": "https://northwinddental.example/",
+    "host": "northwinddental.example",
+    "title": "Home | Northwind Family Dental | Family, Cosmetic and Emergency Dentist in Portland, Oregon"
+  },
+  "brand": {
+    "agencyName": "Northlight Studio",
+    "senderName": "Mina Kovac",
+    "email": "mina@northlight.example",
+    "website": "https://northlight.example/",
+    "bookingUrl": "https://northlight.example/call",
+    "accent": "#FF5C35"
+  },
+  "score": 70,
+  "grade": "C",
+  "gradeLabel": "Fixable gaps",
+  "verdict": "The site is losing trust at the moments that decide a sale. 2 critical issues are visible to every visitor and belong at the top of the list.",
+  "summary": "Audited 4 pages on northwinddental.example across 169 checks. Strongest area: Conversion readiness (89/100). Weakest: Search visibility (55/100). The highest-leverage fix: A form submits over insecure HTTP.",
+  "categories": [
+    {
+      "key": "seo",
+      "label": "Search visibility",
+      "score": 55,
+      "weight": 0.25,
+      "issueCount": 11,
+      "criticalCount": 1,
+      "blurb": "Can the right people find this site?"
+    },
+    {
+      "key": "accessibility",
+      "label": "Accessibility",
+      "score": 74,
+      "weight": 0.2,
+      "issueCount": 6,
+      "criticalCount": 0,
+      "blurb": "Can everyone use it?"
+    },
+    {
+      "key": "performance",
+      "label": "Performance",
+      "score": 69,
+      "weight": 0.2,
+      "issueCount": 7,
+      "criticalCount": 0,
+      "blurb": "Does it feel fast enough to keep visitors?"
+    },
+    {
+      "key": "security",
+      "label": "Security & trust",
+      "score": 67,
+      "weight": 0.15,
+      "issueCount": 9,
+      "criticalCount": 1,
+      "blurb": "Does the site protect the people using it?"
+    },
+    {
+      "key": "conversion",
+      "label": "Conversion readiness",
+      "score": 89,
+      "weight": 0.2,
+      "issueCount": 3,
+      "criticalCount": 0,
+      "blurb": "Is it obvious what a visitor should do next?"
+    }
+  ],
+  "topIssues": [
+    {
+      "checkId": "sec-insecure-form",
+      "category": "security",
+      "severity": "critical",
+      "title": "A form submits over insecure HTTP",
+      "why": "Names, emails, and messages can be intercepted or altered before they reach the business.",
+      "fix": "Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.",
+      "evidence": "1 form actions use http://.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/contact"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 16.91
+    },
+    {
+      "checkId": "seo-title-missing",
+      "category": "seo",
+      "severity": "critical",
+      "title": "The page has no title tag",
+      "why": "Search results and browser tabs have nothing to identify the page, which suppresses clicks even when it ranks.",
+      "fix": "Add a unique 30–60 character title that leads with the service and the location.",
+      "evidence": "No <title> element was found.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/contact"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 16.91
+    },
+    {
+      "checkId": "a11y-img-alt",
+      "category": "accessibility",
+      "severity": "high",
+      "title": "6 images lack alt text",
+      "why": "Screen-reader users miss the content of these images, and search engines miss the context.",
+      "fix": "Describe informative images in alt text; use alt=\"\" for purely decorative images.",
+      "evidence": "6 of 8 images have no alt attribute.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 18
+    }
+  ],
+  "issues": [
+    {
+      "checkId": "a11y-img-alt",
+      "category": "accessibility",
+      "severity": "high",
+      "title": "6 images lack alt text",
+      "why": "Screen-reader users miss the content of these images, and search engines miss the context.",
+      "fix": "Describe informative images in alt text; use alt=\"\" for purely decorative images.",
+      "evidence": "6 of 8 images have no alt attribute.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 18
+    },
+    {
+      "checkId": "a11y-viewport",
+      "category": "accessibility",
+      "severity": "high",
+      "title": "The mobile viewport is not configured",
+      "why": "Without a viewport tag, phones zoom out to show a desktop layout and text becomes unreadable.",
+      "fix": "Add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">.",
+      "evidence": "No viewport meta tag was found.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 18
+    },
+    {
+      "checkId": "perf-ttfb",
+      "category": "performance",
+      "severity": "high",
+      "title": "The server took 3.2s to respond",
+      "why": "Nothing can render until the server responds; a slow first byte caps the experience for everyone.",
+      "fix": "Add page caching or a CDN, and profile slow plugins or database queries.",
+      "evidence": "Measured time to first byte: 3240 ms.",
+      "effort": "involved",
+      "impact": "high",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 18
+    },
+    {
+      "checkId": "conv-thin-content",
+      "category": "conversion",
+      "severity": "high",
+      "title": "The page has almost no substantive content",
+      "why": "Visitors cannot judge the offer, and search engines have little evidence of expertise.",
+      "fix": "Add specific services, proof, pricing or process detail, and answers to common questions.",
+      "evidence": "82 words of primary content were found.",
+      "effort": "involved",
+      "impact": "high",
+      "pagesAffected": [
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 0.75,
+      "count": 3,
+      "priority": 17.34
+    },
+    {
+      "checkId": "sec-insecure-form",
+      "category": "security",
+      "severity": "critical",
+      "title": "A form submits over insecure HTTP",
+      "why": "Names, emails, and messages can be intercepted or altered before they reach the business.",
+      "fix": "Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.",
+      "evidence": "1 form actions use http://.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/contact"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 16.91
+    },
+    {
+      "checkId": "seo-title-missing",
+      "category": "seo",
+      "severity": "critical",
+      "title": "The page has no title tag",
+      "why": "Search results and browser tabs have nothing to identify the page, which suppresses clicks even when it ranks.",
+      "fix": "Add a unique 30–60 character title that leads with the service and the location.",
+      "evidence": "No <title> element was found.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/contact"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 16.91
+    },
+    {
+      "checkId": "seo-broken-links",
+      "category": "seo",
+      "severity": "high",
+      "title": "2 internal links point to missing pages",
+      "why": "Broken paths waste the authority sent to dead ends and frustrate visitors who were ready to act.",
+      "fix": "Restore or redirect each missing URL to the most relevant live page.",
+      "evidence": "/patient-forms → 404 · /team/dr-lee → 404",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/services"
+      ],
+      "prevalence": 0.75,
+      "count": 1,
+      "priority": 15.08
+    },
+    {
+      "checkId": "perf-blocking-scripts",
+      "category": "performance",
+      "severity": "high",
+      "title": "4 scripts block rendering",
+      "why": "Parser-blocking JavaScript in the head delays every visible element behind network requests.",
+      "fix": "Add defer or async, or move non-critical scripts out of the head.",
+      "evidence": "4 scripts load synchronously from the document head.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/",
+        "/contact"
+      ],
+      "prevalence": 0.5,
+      "count": 2,
+      "priority": 12.15
+    },
+    {
+      "checkId": "seo-meta-missing",
+      "category": "seo",
+      "severity": "high",
+      "title": "There is no meta description",
+      "why": "Google will write its own snippet, so the page loses control of the sales pitch in search results.",
+      "fix": "Write a 120–155 character summary with the outcome the customer gets and a reason to click.",
+      "evidence": "No meta description was found.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/",
+        "/contact"
+      ],
+      "prevalence": 0.5,
+      "count": 2,
+      "priority": 12.15
+    },
+    {
+      "checkId": "a11y-form-labels",
+      "category": "accessibility",
+      "severity": "high",
+      "title": "3 form fields have no label",
+      "why": "Screen readers and voice-control tools cannot reliably tell people what to enter.",
+      "fix": "Add a visible <label for> or an aria-label to every input, select, and textarea.",
+      "evidence": "3 of 3 form fields lack a programmatic label.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/contact"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 9.23
+    },
+    {
+      "checkId": "perf-page-weight",
+      "category": "performance",
+      "severity": "high",
+      "title": "The page loads about 6.4 MB",
+      "why": "Large pages drain mobile data and load slowly on the connections many customers actually use.",
+      "fix": "Compress and resize images, use WebP/AVIF, lazy-load below-the-fold media, and remove unused libraries.",
+      "evidence": "6.4 MB across 19 resources measured on the homepage.",
+      "effort": "moderate",
+      "impact": "high",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 9.23
+    },
+    {
+      "checkId": "sec-mixed-content",
+      "category": "security",
+      "severity": "high",
+      "title": "Some resources load over insecure HTTP",
+      "why": "Mixed content can be blocked by browsers and lets an attacker tamper with assets on an otherwise secure page.",
+      "fix": "Serve every image, script, stylesheet, and frame over HTTPS.",
+      "evidence": "Insecure resources: http://legacy-cdn.example.com/hero-practice.jpg.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 9.23
+    },
+    {
+      "checkId": "seo-h1-missing",
+      "category": "seo",
+      "severity": "high",
+      "title": "The page has no H1 heading",
+      "why": "Visitors and search engines lose the page's main topic in the first scan.",
+      "fix": "Add exactly one descriptive H1 that states the service and the audience.",
+      "evidence": "No <h1> element was found.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/about"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 9.23
+    },
+    {
+      "checkId": "seo-noindex",
+      "category": "seo",
+      "severity": "high",
+      "title": "This page is hidden from search engines",
+      "why": "A noindex directive explicitly removes the page from search results, so no amount of content will rank.",
+      "fix": "Remove the noindex directive if this page should attract organic traffic.",
+      "evidence": "The robots meta tag is “noindex,nofollow”.",
+      "effort": "quick",
+      "impact": "high",
+      "pagesAffected": [
+        "/about"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 9.23
+    },
+    {
+      "checkId": "sec-csp",
+      "category": "security",
+      "severity": "medium",
+      "title": "There is no Content Security Policy",
+      "why": "A CSP limits the damage from injected scripts, the most common serious web vulnerability.",
+      "fix": "Start with a report-only policy, then enforce a strict allowlist for scripts, styles, and frames.",
+      "evidence": "The Content-Security-Policy header is missing.",
+      "effort": "involved",
+      "impact": "high",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 9
+    },
+    {
+      "checkId": "perf-image-dimensions",
+      "category": "performance",
+      "severity": "high",
+      "title": "Most images have no width or height",
+      "why": "The browser cannot reserve space, so the layout jumps as images arrive and hurts Core Web Vitals.",
+      "fix": "Add width and height attributes (or a CSS aspect-ratio) to every image.",
+      "evidence": "7 of 8 images have no dimensions.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/",
+        "/services"
+      ],
+      "prevalence": 0.5,
+      "count": 2,
+      "priority": 8.1
+    },
+    {
+      "checkId": "sec-frame",
+      "category": "security",
+      "severity": "medium",
+      "title": "The site can be framed by another origin",
+      "why": "Without clickjacking protection, another site can embed the page and trick visitors into clicking.",
+      "fix": "Send X-Frame-Options: DENY or add frame-ancestors 'none' to the CSP.",
+      "evidence": "Neither X-Frame-Options nor CSP frame-ancestors is set.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 6
+    },
+    {
+      "checkId": "sec-hsts",
+      "category": "security",
+      "severity": "medium",
+      "title": "HSTS is not enabled",
+      "why": "Without HSTS, a first visit can be downgraded from HTTPS to HTTP and exposed to interception.",
+      "fix": "Send Strict-Transport-Security with a long max-age after confirming every subdomain supports HTTPS.",
+      "evidence": "The Strict-Transport-Security header is missing.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 6
+    },
+    {
+      "checkId": "perf-script-count",
+      "category": "performance",
+      "severity": "medium",
+      "title": "14 separate scripts load on this page",
+      "why": "Many scripts compete for bandwidth and main-thread time, even when each one is small.",
+      "fix": "Audit the tags actually needed and consolidate or remove the rest.",
+      "evidence": "14 external scripts were found.",
+      "effort": "moderate",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 3.08
+    },
+    {
+      "checkId": "seo-h1-multiple",
+      "category": "seo",
+      "severity": "medium",
+      "title": "The page has multiple H1 headings",
+      "why": "Competing H1s blur the primary topic and make the page harder to scan.",
+      "fix": "Keep one H1 for the page's main promise and demote the rest to H2/H3.",
+      "evidence": "2 H1 elements were found.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 3.08
+    },
+    {
+      "checkId": "seo-title-long",
+      "category": "seo",
+      "severity": "medium",
+      "title": "The title is likely to be truncated in search results",
+      "why": "Google typically cuts titles around 60 characters, hiding the differentiating part of the message.",
+      "fix": "Tighten the title to 60 characters or fewer, keeping the service and location first.",
+      "evidence": "The title is 91 characters: “Home | Northwind Family Dental | Family, Cosmetic and Emergency Dentist in Portland, Oregon”.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 3.08
+    },
+    {
+      "checkId": "conv-no-social-proof",
+      "category": "conversion",
+      "severity": "low",
+      "title": "There is no visible social proof",
+      "why": "Testimonials, reviews, and ratings reduce the perceived risk of choosing an unfamiliar business.",
+      "fix": "Add a short testimonial, a review rating, or a “trusted by” line near the primary call to action.",
+      "evidence": "No testimonials, reviews, ratings, or case studies were found.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [],
+      "prevalence": 1,
+      "count": 1,
+      "priority": 2.3
+    },
+    {
+      "checkId": "sec-xcto",
+      "category": "security",
+      "severity": "low",
+      "title": "MIME sniffing is not disabled",
+      "why": "Browsers may execute a file as a different type than intended, turning uploads into script.",
+      "fix": "Send X-Content-Type-Options: nosniff on every response.",
+      "evidence": "The X-Content-Type-Options header is missing.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 2
+    },
+    {
+      "checkId": "conv-outdated-copyright",
+      "category": "conversion",
+      "severity": "low",
+      "title": "The copyright still says 2023",
+      "why": "An old date makes an active business look neglected, which undermines trust at the moment of decision.",
+      "fix": "Update the year automatically, or remove the year from the footer.",
+      "evidence": "The newest copyright year found is 2023; the current year is 2026.",
+      "effort": "quick",
+      "impact": "low",
+      "pagesAffected": [],
+      "prevalence": 1,
+      "count": 1,
+      "priority": 1.38
+    },
+    {
+      "checkId": "seo-duplicate-descriptions",
+      "category": "seo",
+      "severity": "low",
+      "title": "Multiple pages share the same meta description",
+      "why": "Repeated snippets waste the chance to match each page's specific search intent.",
+      "fix": "Write a distinct, benefit-led description for every page.",
+      "evidence": "2 pages reuse the same meta description.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/about",
+        "/services"
+      ],
+      "prevalence": 0.5,
+      "count": 1,
+      "priority": 1.35
+    },
+    {
+      "checkId": "sec-permissions",
+      "category": "security",
+      "severity": "low",
+      "title": "Browser features are not restricted",
+      "why": "Third-party scripts can request camera, microphone, or location access the site never needs.",
+      "fix": "Send a Permissions-Policy that disables unused features.",
+      "evidence": "The Permissions-Policy header is missing.",
+      "effort": "quick",
+      "impact": "low",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 1.2
+    },
+    {
+      "checkId": "sec-referrer",
+      "category": "security",
+      "severity": "low",
+      "title": "The referrer policy is undefined",
+      "why": "Full URLs can leak to third parties through the Referer header, including sensitive query strings.",
+      "fix": "Send Referrer-Policy: strict-origin-when-cross-origin.",
+      "evidence": "The Referrer-Policy header is missing.",
+      "effort": "quick",
+      "impact": "low",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 1.2
+    },
+    {
+      "checkId": "seo-canonical-missing",
+      "category": "seo",
+      "severity": "low",
+      "title": "There is no canonical URL",
+      "why": "Without a canonical, tracking parameters and duplicate paths can split ranking signals.",
+      "fix": "Add a self-referencing canonical link pointing to the preferred URL.",
+      "evidence": "No canonical link was found.",
+      "effort": "quick",
+      "impact": "low",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 1.2
+    },
+    {
+      "checkId": "seo-og-incomplete",
+      "category": "seo",
+      "severity": "low",
+      "title": "Social share previews are incomplete",
+      "why": "Links shared in email, Slack, or social feeds will look unfinished and earn fewer clicks.",
+      "fix": "Add og:title, og:description, and a 1200×630 og:image.",
+      "evidence": "Missing og:title and og:image.",
+      "effort": "quick",
+      "impact": "low",
+      "pagesAffected": [
+        "/",
+        "/about",
+        "/contact",
+        "/services"
+      ],
+      "prevalence": 1,
+      "count": 4,
+      "priority": 1.2
+    },
+    {
+      "checkId": "a11y-heading-skip",
+      "category": "accessibility",
+      "severity": "low",
+      "title": "Heading levels skip",
+      "why": "Screen-reader users navigate by headings; skipped levels make the page outline confusing.",
+      "fix": "Keep heading levels in order and style text with CSS instead of choosing tags by size.",
+      "evidence": "Heading sequence: H1 → H1 → H3 → H2 → H2.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 1.02
+    },
+    {
+      "checkId": "a11y-skip-link",
+      "category": "accessibility",
+      "severity": "low",
+      "title": "There is no skip-to-content link",
+      "why": "Keyboard users must tab through the entire navigation to reach the page content.",
+      "fix": "Add a visually hidden “Skip to content” link as the first focusable element.",
+      "evidence": "No skip link was found.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 1.02
+    },
+    {
+      "checkId": "a11y-tabindex",
+      "category": "accessibility",
+      "severity": "low",
+      "title": "Positive tabindex values override natural focus order",
+      "why": "Keyboard focus can jump unpredictably and leave people lost on the page.",
+      "fix": "Remove positive tabindex values and follow DOM order instead.",
+      "evidence": "1 elements use a positive tabindex.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 1.02
+    },
+    {
+      "checkId": "perf-lazy-images",
+      "category": "performance",
+      "severity": "low",
+      "title": "Most images load eagerly",
+      "why": "Below-the-fold images compete with the hero and delay the content customers came to see.",
+      "fix": "Add loading=\"lazy\" to images below the first viewport; keep the hero eager.",
+      "evidence": "0 of 8 images use lazy loading.",
+      "effort": "quick",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 1.02
+    },
+    {
+      "checkId": "perf-stylesheets",
+      "category": "performance",
+      "severity": "low",
+      "title": "6 separate stylesheets delay rendering",
+      "why": "Each stylesheet is render-blocking and many are mostly unused.",
+      "fix": "Bundle critical CSS, defer the rest, and remove unused framework styles.",
+      "evidence": "6 stylesheet links were found.",
+      "effort": "moderate",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 1.02
+    },
+    {
+      "checkId": "seo-structured-data-missing",
+      "category": "seo",
+      "severity": "low",
+      "title": "No structured data for search engines",
+      "why": "Without schema markup, search engines lack explicit business details for rich results.",
+      "fix": "Add LocalBusiness or Organization JSON-LD with the name, address, phone, hours, and services.",
+      "evidence": "No application/ld+json block was found.",
+      "effort": "moderate",
+      "impact": "medium",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 1.02
+    },
+    {
+      "checkId": "sec-server-disclosure",
+      "category": "security",
+      "severity": "low",
+      "title": "The server reveals its software version",
+      "why": "Version numbers help attackers target known vulnerabilities and add no value for visitors.",
+      "fix": "Hide server tokens and version strings at the server or CDN layer.",
+      "evidence": "The Server header exposes “Apache/2.4.29 (Unix)”.",
+      "effort": "quick",
+      "impact": "low",
+      "pagesAffected": [
+        "/"
+      ],
+      "prevalence": 0.25,
+      "count": 1,
+      "priority": 0.61
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://northwinddental.example/",
+      "path": "/",
+      "status": 200,
+      "title": "Home | Northwind Family Dental | Family, Cosmetic and Emergency Dentist in Portland, Oregon",
+      "score": 0,
+      "grade": "F",
+      "wordCount": 369,
+      "ttfbMs": 3240,
+      "htmlKb": 5,
+      "issueCount": 27,
+      "criticalCount": 0,
+      "highCount": 9,
+      "topFinding": "6 images lack alt text",
+      "metrics": {
+        "images": 8,
+        "missingAlt": 7,
+        "scripts": 14,
+        "links": 5,
+        "h1Count": 2
+      }
+    },
+    {
+      "url": "https://northwinddental.example/services",
+      "path": "/services",
+      "status": 200,
+      "title": "Dental Services in Portland | Northwind Family Dental",
+      "score": 40,
+      "grade": "F",
+      "wordCount": 200,
+      "ttfbMs": 1610,
+      "htmlKb": 2,
+      "issueCount": 15,
+      "criticalCount": 0,
+      "highCount": 3,
+      "topFinding": "The mobile viewport is not configured",
+      "metrics": {
+        "images": 3,
+        "missingAlt": 2,
+        "scripts": 1,
+        "links": 5,
+        "h1Count": 1
+      }
+    },
+    {
+      "url": "https://northwinddental.example/about",
+      "path": "/about",
+      "status": 200,
+      "title": "About Northwind Family Dental",
+      "score": 26,
+      "grade": "F",
+      "wordCount": 82,
+      "ttfbMs": 1840,
+      "htmlKb": 1,
+      "issueCount": 16,
+      "criticalCount": 0,
+      "highCount": 5,
+      "topFinding": "The mobile viewport is not configured",
+      "metrics": {
+        "images": 2,
+        "missingAlt": 2,
+        "scripts": 0,
+        "links": 6,
+        "h1Count": 0
+      }
+    },
+    {
+      "url": "https://northwinddental.example/contact",
+      "path": "/contact",
+      "status": 200,
+      "title": "/contact",
+      "score": 0,
+      "grade": "F",
+      "wordCount": 141,
+      "ttfbMs": 2080,
+      "htmlKb": 2,
+      "issueCount": 17,
+      "criticalCount": 2,
+      "highCount": 4,
+      "topFinding": "A form submits over insecure HTTP",
+      "metrics": {
+        "images": 2,
+        "missingAlt": 1,
+        "scripts": 1,
+        "links": 5,
+        "h1Count": 1
+      }
+    }
+  ],
+  "actionPlan": [
+    {
+      "key": "now",
+      "window": "Days 0–30",
+      "title": "Stop the leaks",
+      "items": [
+        "A form submits over insecure HTTP — Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.",
+        "The page has no title tag — Add a unique 30–60 character title that leads with the service and the location."
+      ]
+    },
+    {
+      "key": "next",
+      "window": "Days 30–60",
+      "title": "Rebuild the foundation",
+      "items": [
+        "6 images lack alt text — Describe informative images in alt text; use alt=\"\" for purely decorative images.",
+        "The mobile viewport is not configured — Add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">.",
+        "The server took 3.2s to respond — Add page caching or a CDN, and profile slow plugins or database queries.",
+        "Plus 10 more fixes from the full findings list."
+      ]
+    },
+    {
+      "key": "later",
+      "window": "Days 60–90",
+      "title": "Compound the gains",
+      "items": [
+        "There is no Content Security Policy — Start with a report-only policy, then enforce a strict allowlist for scripts, styles, and frames.",
+        "The site can be framed by another origin — Send X-Frame-Options: DENY or add frame-ancestors 'none' to the CSP.",
+        "HSTS is not enabled — Send Strict-Transport-Security with a long max-age after confirming every subdomain supports HTTPS.",
+        "Plus 18 more fixes from the full findings list."
+      ]
+    }
+  ],
+  "pitch": {
+    "emails": [
+      {
+        "id": "direct",
+        "label": "The direct one",
+        "subject": "36 fixable issues on northwinddental.example",
+        "body": "Hi,\n\nI ran a public audit of northwinddental.example — 4 pages and 169 checks, all from the outside.\n\nHere is what stood out:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that leads with the service and the location.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nThe site scores 70/100 overall, with search visibility as the biggest opportunity. 2 of them are critical and visible to every visitor.\n\nI have the full 36-item dossier ready, including the page-by-page evidence and a 30/60/90 plan.\n\nIf you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
+      },
+      {
+        "id": "consultative",
+        "label": "The soft touch",
+        "subject": "northwinddental.example: what is working and what to fix next",
+        "body": "Hi,\n\nI spent a few minutes looking at northwinddental.example this week. Even the strongest area, Conversion readiness, sits at 89/100, so there is room across the board.\n\nA few things are holding the site back:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that leads with the service and the location.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nOverall it scores 70/100. The gaps are concentrated in search visibility, and they are specific rather than structural.\n\nI have put the findings, page evidence, and a 30/60/90 plan into a short dossier. If you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nNo pitch attached — just a useful second opinion.\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
+      }
+    ],
+    "followUp": {
+      "subject": "Re: 36 fixable issues on northwinddental.example",
+      "body": "Hi,\n\nFollowing up on the audit of northwinddental.example. The first thing I would fix is still this: a form submits over insecure http.\n\nThe full dossier is ready whenever you want it — https://northlight.example/call\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
+    },
+    "callOpener": "Before this call I ran a public audit of northwinddental.example. It scored 70/100 across 169 checks. The single clearest fix: A form submits over insecure HTTP. I can walk you through the 36 findings and the order I would tackle them in about ten minutes.",
+    "talkingPoints": [
+      "northwinddental.example scored 70/100 across 169 checks and 4 pages; 36 distinct issues came up, 2 of them critical.",
+      "Search visibility is the weakest area at 55/100.",
+      "A form submits over insecure HTTP: 1 form actions use http://."
+    ]
+  },
+  "stats": {
+    "pagesCrawled": 4,
+    "pagesLimit": 8,
+    "checksRun": 169,
+    "issuesFound": 36,
+    "criticalCount": 2,
+    "highCount": 13,
+    "brokenLinks": 2,
+    "linkChecks": 9,
+    "homepageWeightKb": 6250,
+    "durationMs": 9674
+  },
+  "crawl": {
+    "robots": "respected",
+    "pagesLimit": 8,
+    "userAgent": "ClinchAuditBot/1.0 (+https://github.com/momcilosavic1234567-creator/clinch; respectful audit bot)",
+    "tech": [
+      "Google Analytics 4"
+    ]
+  }
+}

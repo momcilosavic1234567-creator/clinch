@@ -1,0 +1,44 @@
+import type { Metadata } from "next";
+import { AuditFallback } from "@/components/dossier/audit-fallback";
+import { DossierView } from "@/components/dossier/dossier-view";
+import { loadAudit } from "@/lib/audit/store";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const audit = await loadAudit(id);
+
+  if (!audit) {
+    return {
+      title: "Audit not found",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  return {
+    title: `Prospect audit — ${audit.target.host}`,
+    description: `${audit.stats.pagesCrawled} pages, ${audit.stats.checksRun} checks, ${audit.stats.issuesFound} findings. ${audit.target.host} scored ${audit.score}/100.`,
+    robots: { index: false, follow: false },
+  };
+}
+
+export default async function AuditPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const audit = await loadAudit(id);
+
+  if (!audit) {
+    return <AuditFallback id={id} />;
+  }
+
+  return <DossierView audit={audit} isSample={id === "sample"} />;
+}
