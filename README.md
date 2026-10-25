@@ -1,5 +1,8 @@
 # Clinch
 
+[![CI](https://github.com/momcilosavic1234567-creator/clinch/actions/workflows/ci.yml/badge.svg)](https://github.com/momcilosavic1234567-creator/clinch/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-d8ff4f)](LICENSE)
+
 **Win the pitch before the first call.**
 
 Clinch turns a prospect's public website into a white-label audit dossier, a 30/60/90 fix plan, and outreach written from the evidence — in about a minute.
