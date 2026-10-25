@@ -15,8 +15,10 @@ export async function generateMetadata({
   const audit = await loadAudit(id);
 
   if (!audit) {
+    // Live audits live in the browser on serverless; metadata cannot know yet.
     return {
-      title: "Audit not found",
+      title: "Prospect audit dossier",
+      description: "A white-label prospect audit from Clinch.",
       robots: { index: false, follow: false },
     };
   }
