@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Accessibility,
@@ -15,6 +16,10 @@ import {
 import { AuditForm } from "@/components/audit-form";
 import sampleJson from "@/data/sample-audit.json";
 import type { Audit } from "@/lib/audit/types";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const sample = sampleJson as unknown as Audit;
 const sampleEmail = sample.pitch.emails[0];
