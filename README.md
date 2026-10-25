@@ -9,7 +9,7 @@ Clinch turns a prospect's public website into a white-label audit dossier, a 30/
 
 Built for web agencies that prospect with cold email and need to sound like they already did the work.
 
-[**Open the sample dossier →**](docs/sample-audit.pdf)
+[**Live demo →**](https://clinch-audit.vercel.app) · [**Open the sample dossier →**](docs/sample-audit.pdf)
 
 ![Clinch landing page](docs/screenshot-landing.png)
 
@@ -163,6 +163,8 @@ vercel --prod
 ```
 
 Set `NEXT_PUBLIC_SITE_URL` to the production domain for correct canonical and social metadata.
+
+The public demo runs at [clinch-audit.vercel.app](https://clinch-audit.vercel.app).
 
 **Storage on serverless:** Vercel's filesystem is ephemeral, so a hosted audit is not a durable cross-device share. The sample dossier is always available, and audits remain accessible in the browser that ran them via the local fallback. For durable links, add object storage (S3, R2, Vercel Blob) behind `store.ts` and point the dossier route at it.
 
