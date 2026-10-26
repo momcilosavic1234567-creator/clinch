@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   Check,
   Download,
+  FileOutput,
   FileText,
   Link2,
   Mail,
@@ -184,6 +185,14 @@ export function DossierView({
               <Download className="size-3.5" aria-hidden />
               <span className="hidden lg:inline">JSON</span>
             </button>
+            <Link
+              href={`/audit/${audit.id}/one-pager`}
+              className="flex items-center gap-1.5 border border-line px-2.5 py-2 font-mono text-[10px] uppercase tracking-[0.1em] text-bone/65 transition hover:border-bone/40 hover:text-bone"
+              title="One printed page: the three findings that matter most"
+            >
+              <FileOutput className="size-3.5" aria-hidden />
+              <span className="hidden lg:inline">One-pager</span>
+            </Link>
             <button
               type="button"
               onClick={handlePrint}

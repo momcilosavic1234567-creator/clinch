@@ -254,6 +254,22 @@ svg {
     break-before: page;
   }
 
+  .one-pager-view {
+    background: #ffffff !important;
+    min-height: auto !important;
+    padding: 0 !important;
+  }
+
+  .one-pager-sheet {
+    width: auto !important;
+    max-width: none !important;
+    min-height: 265mm !important;
+    margin: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
   .print-break {
     break-before: page;
   }
