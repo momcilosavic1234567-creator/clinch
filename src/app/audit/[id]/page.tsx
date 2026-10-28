@@ -51,7 +51,7 @@ export default async function AuditPage({
   const audit = await loadAudit(id);
 
   if (!audit) {
-    return <AuditFallback id={id} />;
+    return <AuditFallback key={id} id={id} />;
   }
 
   return <DossierView audit={audit} isSample={id === "sample"} />;

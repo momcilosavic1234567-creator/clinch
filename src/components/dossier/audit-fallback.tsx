@@ -3,31 +3,25 @@
 import Link from "next/link";
 import { ArrowLeft, SearchX } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { Audit } from "@/lib/audit/types";
+import {
+  readStoredAudit,
+  resolveAuditView,
+  type LoadedAudit,
+} from "@/lib/audit/browser-store";
 import { DossierView } from "./dossier-view";
 
 export function AuditFallback({ id }: { id: string }) {
-  const [audit, setAudit] = useState<Audit | null>(null);
-  const [checked, setChecked] = useState(false);
+  const [loaded, setLoaded] = useState<LoadedAudit>(null);
 
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(`clinch:audit:${id}`);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Audit;
-        if (parsed && parsed.version === 1 && parsed.id === id) {
-          setAudit(parsed);
-        }
-      }
-    } catch {
-      // Ignore corrupt or blocked storage and show the expiry message.
-    }
-    setChecked(true);
+    setLoaded({ id, audit: readStoredAudit(id) });
   }, [id]);
 
-  if (audit) {
+  const view = resolveAuditView(loaded, id);
+
+  if (view.status === "found") {
     return (
-      <DossierView audit={audit} isSample={id === "sample"} browserOnly />
+      <DossierView audit={view.audit} isSample={id === "sample"} browserOnly />
     );
   }
 
@@ -37,7 +31,7 @@ export function AuditFallback({ id }: { id: string }) {
       className="grid min-h-screen place-items-center bg-ink px-6 py-16 text-bone"
     >
       <div className="w-full max-w-xl border border-line bg-ink-soft p-8">
-        {!checked ? (
+        {view.status === "checking" ? (
           <>
             <p className="kicker text-signal">Checking this browser</p>
             <h1 className="display mt-4 text-4xl">Looking for your dossier…</h1>

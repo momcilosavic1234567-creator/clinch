@@ -13,6 +13,7 @@ import {
   Printer,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { saveStoredAudit } from "@/lib/audit/browser-store";
 import type { Audit } from "@/lib/audit/types";
 import { DossierPages, formatDate } from "./dossier-pages";
 import { PitchKitView } from "./pitch-kit-view";
@@ -35,14 +36,8 @@ export function DossierView({
   const timer = useRef<number | null>(null);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        `clinch:audit:${audit.id}`,
-        JSON.stringify(audit),
-      );
-    } catch {
-      // Private browsing can block storage; the dossier still renders in memory.
-    }
+    // Private browsing can block storage; the dossier still renders in memory.
+    saveStoredAudit(audit);
   }, [audit]);
 
   useEffect(

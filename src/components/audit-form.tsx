@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { saveStoredAudit } from "@/lib/audit/browser-store";
 import type { Audit, AuditEvent } from "@/lib/audit/types";
 
 const ACCENTS = [
@@ -104,14 +105,9 @@ export function AuditForm() {
   }
 
   function finish(audit: Audit) {
-    try {
-      window.localStorage.setItem(
-        `clinch:audit:${audit.id}`,
-        JSON.stringify(audit),
-      );
-    } catch {
-      // The dossier page falls back to browser storage instead.
-    }
+    // Storage can be blocked in private browsing; the dossier still renders
+    // from the audit in memory.
+    saveStoredAudit(audit);
     setProgress(100);
     setPhase("opening");
     router.push(`/audit/${audit.id}`);

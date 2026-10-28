@@ -3,30 +3,24 @@
 import Link from "next/link";
 import { ArrowLeft, SearchX } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { Audit } from "@/lib/audit/types";
+import {
+  readStoredAudit,
+  resolveAuditView,
+  type LoadedAudit,
+} from "@/lib/audit/browser-store";
 import { OnePager } from "./one-pager";
 
 export function OnePagerFallback({ id }: { id: string }) {
-  const [audit, setAudit] = useState<Audit | null>(null);
-  const [checked, setChecked] = useState(false);
+  const [loaded, setLoaded] = useState<LoadedAudit>(null);
 
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(`clinch:audit:${id}`);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Audit;
-        if (parsed && parsed.version === 1 && parsed.id === id) {
-          setAudit(parsed);
-        }
-      }
-    } catch {
-      // Storage can be blocked or full; fall through to the message.
-    }
-    setChecked(true);
+    setLoaded({ id, audit: readStoredAudit(id) });
   }, [id]);
 
-  if (audit) {
-    return <OnePager audit={audit} isSample={id === "sample"} />;
+  const view = resolveAuditView(loaded, id);
+
+  if (view.status === "found") {
+    return <OnePager audit={view.audit} isSample={id === "sample"} />;
   }
 
   return (
@@ -35,7 +29,7 @@ export function OnePagerFallback({ id }: { id: string }) {
       className="grid min-h-screen place-items-center bg-ink px-6 py-16 text-bone"
     >
       <div className="w-full max-w-xl border border-line bg-ink-soft p-8">
-        {!checked ? (
+        {view.status === "checking" ? (
           <p className="kicker text-signal">Looking for your audit…</p>
         ) : (
           <>

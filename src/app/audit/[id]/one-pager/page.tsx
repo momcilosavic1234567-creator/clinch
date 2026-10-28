@@ -44,7 +44,7 @@ export default async function OnePagerPage({
   const audit = await loadAudit(id);
 
   if (!audit) {
-    return <OnePagerFallback id={id} />;
+    return <OnePagerFallback key={id} id={id} />;
   }
 
   return <OnePager audit={audit} isSample={id === "sample"} />;
