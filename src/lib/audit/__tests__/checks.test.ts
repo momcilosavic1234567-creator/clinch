@@ -266,6 +266,19 @@ describe("performance checks", () => {
     );
     expect(ids(result)).toHaveLength(0);
   });
+
+  it("ignores the legacy nomodule bundle when measuring blocking scripts", () => {
+    const result = runPerformanceChecks(
+      makePage(
+        `<html><head>
+           <script src="/modern.js" async></script>
+           <script src="/legacy.js" nomodule></script>
+         </head><body><p>${"x".repeat(600)}</p></body></html>`,
+      ),
+    );
+
+    expect(ids(result)).not.toContain("perf-blocking-scripts");
+  });
 });
 
 describe("security checks", () => {

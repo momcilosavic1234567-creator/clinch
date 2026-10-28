@@ -280,7 +280,9 @@ function extractScripts(
       const isModule = type === "module";
       const async = $element.attr("async") !== undefined;
       const defer = $element.attr("defer") !== undefined;
-      const blocking = inHead && !async && !defer && !isModule;
+      // Modern browsers skip nomodule bundles entirely, so they cannot block rendering for them.
+      const legacyOnly = $element.attr("nomodule") !== undefined;
+      const blocking = inHead && !async && !defer && !isModule && !legacyOnly;
       if (blocking) hasRenderBlockingScript = true;
 
       const external = new URL(src).origin !== base.origin;
