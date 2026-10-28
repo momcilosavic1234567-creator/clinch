@@ -164,6 +164,7 @@ export interface ExtractedPage {
   externalScriptDomains: string[];
   contactMethods: string[];
   ctas: string[];
+  hasFormAction: boolean;
   socialProof: boolean;
   copyrightYear: number | null;
   wordCount: number;

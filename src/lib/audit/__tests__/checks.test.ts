@@ -327,6 +327,22 @@ describe("conversion checks", () => {
     );
     expect(ids(result)).toHaveLength(0);
   });
+
+  it("does not call a page with a working form action a dead end", () => {
+    const formPage = makePage(
+      `<html lang="en"><head><title>Clinch</title></head><body>
+        <h1>Audit a prospect site</h1>
+        <p>${"Turn a homepage into a pitch-ready report in about a minute. ".repeat(30)}</p>
+        <form>
+          <label for="prospect">Prospect website</label>
+          <input id="prospect" name="url">
+          <button type="submit">Audit this website</button>
+        </form>
+      </body></html>`,
+    );
+
+    expect(ids(runConversionChecks(formPage))).not.toContain("conv-no-cta");
+  });
 });
 
 describe("site checks", () => {

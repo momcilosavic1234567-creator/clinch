@@ -105,6 +105,32 @@ function accessibleName($: CheerioAPI, element: AnyNode): string {
   return collapse($element.text());
 }
 
+function extractFormAction($: CheerioAPI): boolean {
+  let found = false;
+  $("form").each((_, form) => {
+    if (found) return;
+    $(form)
+      .find("button, input")
+      .each((__, control) => {
+        if (found) return;
+        const $control = $(control);
+        const tag = control.tagName.toLowerCase();
+        const type = ($control.attr("type") ?? (tag === "button" ? "submit" : "text")).toLowerCase();
+        if (tag === "button" && type === "submit" && accessibleName($, control)) {
+          found = true;
+        }
+        if (
+          tag === "input" &&
+          (type === "submit" || type === "image") &&
+          (collapse($control.attr("value") ?? "") || accessibleName($, control))
+        ) {
+          found = true;
+        }
+      });
+  });
+  return found;
+}
+
 function extractLinks(
   $: CheerioAPI,
   base: URL,
@@ -398,6 +424,7 @@ export function extractPage(html: string, pageUrl: string): ExtractedPage {
 
   const images = extractImages($, base);
   const formFields = extractFormFields($);
+  const hasFormAction = extractFormAction($);
   const { scripts, externalDomains, hasRenderBlockingScript } = extractScripts($, base);
 
   let unnamedLinks = 0;
@@ -462,6 +489,7 @@ export function extractPage(html: string, pageUrl: string): ExtractedPage {
     externalScriptDomains: externalDomains,
     contactMethods,
     ctas,
+    hasFormAction,
     socialProof: SOCIAL_PROOF_PATTERN.test(bodyText),
     copyrightYear: extractCopyrightYear(bodyText),
     wordCount: extractWordCount($),

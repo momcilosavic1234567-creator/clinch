@@ -20,6 +20,7 @@ export async function generateMetadata({
       : "One-page website check",
     description:
       "A single-page summary of the three findings that matter most, ready to print.",
+    alternates: { canonical: `/audit/${id}/one-pager` },
     robots: { index: false, follow: false },
   };
 }

@@ -14,6 +14,30 @@ const securityHeaders = [
   },
 ];
 
+// Next hydrates with inline bootstrap scripts; a nonce pipeline would need
+// middleware, so inline script/style is allowed while every remote source is not.
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "media-src 'self'",
+  "manifest-src 'self'",
+].join("; ");
+
+if (process.env.NODE_ENV === "production") {
+  securityHeaders.push({
+    key: "Content-Security-Policy",
+    value: contentSecurityPolicy,
+  });
+}
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   turbopack: {

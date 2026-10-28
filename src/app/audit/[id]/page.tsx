@@ -19,6 +19,7 @@ export async function generateMetadata({
     return {
       title: "Prospect audit dossier",
       description: "A white-label prospect audit from Clinch.",
+      alternates: { canonical: `/audit/${id}` },
       robots: { index: false, follow: false },
     };
   }
@@ -26,6 +27,7 @@ export async function generateMetadata({
   return {
     title: `Prospect audit — ${audit.target.host}`,
     description: `${audit.stats.pagesCrawled} pages, ${audit.stats.checksRun} checks, ${audit.stats.issuesFound} findings. ${audit.target.host} scored ${audit.score}/100.`,
+    alternates: { canonical: `/audit/${id}` },
     robots: { index: false, follow: false },
   };
 }

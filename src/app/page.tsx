@@ -18,10 +18,35 @@ import sampleJson from "@/data/sample-audit.json";
 import type { Audit } from "@/lib/audit/types";
 import { mailtoHref } from "@/lib/contact";
 import { AGENCY_INTRO, AGENCY_PILOT } from "@/lib/offer";
+import { siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
+
+const JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: "Clinch",
+      url: `${siteUrl}/`,
+      inLanguage: "en",
+      description:
+        "Clinch turns a prospect's website into a white-label audit, a 30/60/90 plan, and outreach that sells it.",
+    },
+    {
+      "@type": "Organization",
+      name: "Clinch",
+      url: `${siteUrl}/`,
+      founder: {
+        "@type": "Person",
+        name: "Momčilo Savić",
+        url: "https://github.com/momcilosavic1234567-creator",
+      },
+    },
+  ],
+}).replace(/</g, "\\u003c");
 
 const sample = sampleJson as unknown as Audit;
 const sampleEmail = sample.pitch.emails[0];
@@ -113,6 +138,10 @@ const ticker = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-ink text-bone">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON_LD }}
+      />
       <header className="sticky top-0 z-50 border-b border-line bg-ink/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6 lg:px-10">
           <Link href="/" className="flex items-baseline gap-2.5">

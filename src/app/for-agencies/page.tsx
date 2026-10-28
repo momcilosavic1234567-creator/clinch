@@ -29,7 +29,7 @@ const packageHref = mailtoHref(
 const questionHref = mailtoHref("Question about Clinch audits");
 
 const title = "Done-for-you prospect audits for web agencies";
-const description = `Start with one manually reviewed audit for €${AGENCY_INTRO.priceEur}, or the five-audit package for €${AGENCY_PILOT.priceEur}. White-label dossiers with evidence-backed findings, a pitch kit, and a 30/60/90 plan, delivered in ${AGENCY_PILOT.turnaroundHours} hours.`;
+const description = `One manually reviewed audit for €${AGENCY_INTRO.priceEur}, or five for €${AGENCY_PILOT.priceEur}. White-label dossiers with evidence-backed findings, a pitch kit, and a 30/60/90 plan in ${AGENCY_PILOT.turnaroundHours} hours.`;
 
 export const metadata: Metadata = {
   title,

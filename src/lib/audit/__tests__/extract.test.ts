@@ -135,6 +135,30 @@ describe("extractPage", () => {
     expect(portfolio.ctas.join(" ")).toContain("View Full Résumé");
   });
 
+  it("records a labelled submit control as a form action", () => {
+    const withSubmit = extractPage(
+      `<html lang="en"><head><title>Clinch</title></head><body>
+         <form>
+           <input name="url" aria-label="Prospect website">
+           <button type="submit">Audit this website</button>
+         </form>
+       </body></html>`,
+      "https://clinch.example/",
+    );
+    const withoutSubmit = extractPage(
+      `<html lang="en"><head><title>Clinch</title></head><body>
+         <form>
+           <input name="url" aria-label="Prospect website">
+           <button type="button">Clear</button>
+         </form>
+       </body></html>`,
+      "https://clinch.example/",
+    );
+
+    expect(withSubmit.hasFormAction).toBe(true);
+    expect(withoutSubmit.hasFormAction).toBe(false);
+  });
+
   it("audits form labels and accessible names", () => {
     const email = page.formFields.find((field) => field.name === "email");
     const phone = page.formFields.find((field) => field.name === "phone");

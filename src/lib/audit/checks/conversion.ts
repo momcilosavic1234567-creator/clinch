@@ -39,7 +39,7 @@ export function runConversionChecks(
     });
   }
 
-  if (extracted.ctas.length === 0) {
+  if (extracted.ctas.length === 0 && !extracted.hasFormAction) {
     add({
       checkId: "conv-no-cta",
       severity: isHome ? "high" : "medium",
