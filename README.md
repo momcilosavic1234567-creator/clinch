@@ -107,7 +107,7 @@ Open [http://localhost:3000](http://localhost:3000), paste a public site, and ru
 | `npm run dev` | Development server |
 | `npm run build` | Production build |
 | `npm start` | Serve the production build |
-| `npm test` | Vitest suite (155 tests) |
+| `npm test` | Vitest suite (189 tests) |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run sample` | Regenerate the sample audit through the real engine against a local fixture |
 
@@ -155,6 +155,7 @@ Notable copy invariants enforced by tests:
 - The direct email contains exactly one ask.
 - The follow-up names the top finding in a complete sentence.
 - A clean site still gets coherent outreach rather than empty claims.
+- Conversion advice matches the detected business type, and falls back to neutral wording when the type is ambiguous.
 
 ## Deployment
 

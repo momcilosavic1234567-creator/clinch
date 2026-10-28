@@ -17,6 +17,7 @@ import { AuditForm } from "@/components/audit-form";
 import sampleJson from "@/data/sample-audit.json";
 import type { Audit } from "@/lib/audit/types";
 import { mailtoHref } from "@/lib/contact";
+import { AGENCY_PILOT } from "@/lib/offer";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -792,9 +793,16 @@ export default function Home() {
                 Clinch is the engine. I can run it for you.
               </h2>
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-ink/65">
-                Send five prospect URLs and your brand details. In 48 hours you
-                get five white-label dossiers and the outreach to send them —
-                reviewed by me, delivered under your name.
+                Send {AGENCY_PILOT.dossierCount} prospect URLs and your brand
+                details. In {AGENCY_PILOT.turnaroundHours} hours you get{" "}
+                {AGENCY_PILOT.dossierCount} white-label dossiers and the
+                outreach to send them — reviewed by me,
+                delivered under your name. €{AGENCY_PILOT.priceEur} for the
+                batch, €{AGENCY_PILOT.perDossierEur} per dossier, paid once.
+              </p>
+              <p className="mt-4 max-w-xl font-mono text-[10px] uppercase leading-relaxed tracking-[0.12em] text-ink/50">
+                You send: {AGENCY_PILOT.dossierCount} public URLs, logo or
+                wordmark, accent hex, sender name, reply-to email, booking link.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
@@ -818,9 +826,12 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-3 gap-px border border-ink/20 bg-ink/15">
               {[
-                ["05", "dossiers"],
-                ["48h", "turnaround"],
-                ["€300", "fixed fee"],
+                [
+                  String(AGENCY_PILOT.dossierCount).padStart(2, "0"),
+                  "dossiers",
+                ],
+                [`${AGENCY_PILOT.turnaroundHours}h`, "turnaround"],
+                [`€${AGENCY_PILOT.priceEur}`, "fixed fee"],
               ].map(([value, label]) => (
                 <div key={label} className="bg-bone p-4 sm:p-5">
                   <p className="display text-3xl leading-none sm:text-4xl">

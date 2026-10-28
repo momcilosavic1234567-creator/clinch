@@ -13,14 +13,18 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { CONTACT_EMAIL, mailtoHref } from "@/lib/contact";
+import {
+  AGENCY_DELIVERABLES,
+  AGENCY_INPUTS,
+  AGENCY_PILOT,
+} from "@/lib/offer";
 
-const pilotSubject = "Clinch pilot — five prospect audits";
+const pilotSubject = `Clinch pilot — ${AGENCY_PILOT.dossierCount} prospect audits`;
 const pilotHref = mailtoHref(pilotSubject);
 const questionHref = mailtoHref("Question about the Clinch agency pilot");
 
 const title = "Done-for-you prospect audits for web agencies";
-const description =
-  "Send five prospect URLs and your brand details. In 48 hours you get five white-label audit dossiers and the outreach copy to send them.";
+const description = `Send ${AGENCY_PILOT.dossierCount} prospect URLs and your brand details. In ${AGENCY_PILOT.turnaroundHours} hours you get ${AGENCY_PILOT.dossierCount} white-label audit dossiers and the outreach copy to send them — €${AGENCY_PILOT.priceEur} for the batch.`;
 
 export const metadata: Metadata = {
   title,
@@ -42,19 +46,13 @@ export const metadata: Metadata = {
   },
 };
 
-const included = [
-  "A seven-page A4 dossier with your logo, accent, sender, and booking link",
-  "Two outreach emails, a follow-up, a call opener, and three talking points",
-  "A 30/60/90 plan with effort and impact on every fix",
-  "The page-by-page evidence behind every finding",
-  "A JSON file for your CRM, proposal, or internal notes",
-];
+const included = AGENCY_DELIVERABLES;
 
 const steps = [
   {
     number: "01",
     title: "Send the brief",
-    body: "Five public prospect URLs, your logo or wordmark, accent hex, sender name, reply-to email, and booking link. One email is enough.",
+    body: `${AGENCY_PILOT.dossierCount} public prospect URLs, your logo or wordmark, accent hex, sender name, reply-to email, and booking link. One email is enough.`,
   },
   {
     number: "02",
@@ -64,14 +62,14 @@ const steps = [
   {
     number: "03",
     title: "You send under your name",
-    body: "Within 48 hours you get five print-ready dossiers and five pitch kits. Your prospect never sees Clinch, and you never hand over a tool login.",
+    body: `Within ${AGENCY_PILOT.turnaroundHours} hours you get ${AGENCY_PILOT.dossierCount} print-ready dossiers and ${AGENCY_PILOT.dossierCount} pitch kits. Your prospect never sees Clinch, and you never hand over a tool login.`,
   },
 ];
 
 const stats = [
   { value: "49", label: "checks on the first page" },
   { value: "8", label: "pages max per prospect" },
-  { value: "155", label: "automated tests" },
+  { value: "1", label: "fixed fee, paid once" },
   { value: "0", label: "LLM calls in the engine" },
 ];
 
@@ -89,12 +87,16 @@ const notFit = [
 
 const faqs = [
   [
-    "What exactly do I need to send?",
-    "Five public prospect URLs, your logo (PNG or JPG) or a wordmark, accent hex, sender name, reply-to email, and booking link. If you do not have a logo, a clean wordmark is enough.",
+    `Is €${AGENCY_PILOT.priceEur} the full price?`,
+    `Yes. €${AGENCY_PILOT.priceEur} covers ${AGENCY_PILOT.dossierCount} prospect dossiers at €${AGENCY_PILOT.perDossierEur} each, including the pitch kit, the 30/60/90 plan, and the JSON export. There is no subscription, no per-seat fee, and no add-on needed to use the reports.`,
   ],
   [
-    "How does the 48-hour clock work?",
-    "It starts when the five URLs and brand inputs are complete. If a site blocks the audit, I will flag it and swap in another prospect rather than quietly deliver four reports.",
+    "What exactly do I need to send?",
+    `Everything in the “You send” list above: ${AGENCY_PILOT.dossierCount} public prospect URLs, your logo (PNG or JPG) or a wordmark, accent hex, sender name, reply-to email, and booking link. If you do not have a logo, a clean wordmark is enough.`,
+  ],
+  [
+    `How does the ${AGENCY_PILOT.turnaroundHours}-hour clock work?`,
+    `It starts when the ${AGENCY_PILOT.dossierCount} URLs and brand inputs are complete. If a site blocks the audit, I will flag it and swap in another prospect rather than quietly deliver ${AGENCY_PILOT.dossierCount - 1} reports.`,
   ],
   [
     "Will Clinch appear anywhere on the report?",
@@ -163,17 +165,20 @@ export default function ForAgenciesPage() {
                 Your prospect audits, delivered under your name.
               </h1>
               <p className="mt-7 max-w-xl text-pretty text-base leading-relaxed text-bone/70 sm:text-lg">
-                I built Clinch, the audit engine on this site. Send me five
-                prospect URLs and your brand details. In 48 hours you get five
-                print-ready dossiers and the outreach copy to send them — with
-                your logo, your sender, and your booking link.
+                I built Clinch, the audit engine on this site. Send me{" "}
+                {AGENCY_PILOT.dossierCount} prospect URLs and your brand
+                details. In {AGENCY_PILOT.turnaroundHours} hours you get{" "}
+                {AGENCY_PILOT.dossierCount} print-ready dossiers and the
+                outreach copy to send them — with your logo,
+                your sender, and your booking link. €{AGENCY_PILOT.priceEur} for
+                the batch, €{AGENCY_PILOT.perDossierEur} per dossier, paid once.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <a
                   href={pilotHref}
                   className="group inline-flex items-center gap-2 bg-signal px-5 py-3 text-sm font-medium text-ink transition hover:bg-bone"
                 >
-                  Start a five-audit pilot
+                  Start a {AGENCY_PILOT.dossierCount}-audit pilot
                   <ArrowUpRight
                     className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                     aria-hidden
@@ -203,24 +208,41 @@ export default function ForAgenciesPage() {
               <div className="flex items-start justify-between gap-4">
                 <p className="kicker text-ink/50">Pilot batch</p>
                 <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ink/40">
-                  01 / Five prospects
+                  01 / {AGENCY_PILOT.dossierCount} prospects
                 </span>
               </div>
               <div className="mt-6 flex items-end gap-3">
-                <p className="display text-7xl leading-none">€300</p>
+                <p className="display text-7xl leading-none">
+                  €{AGENCY_PILOT.priceEur}
+                </p>
                 <p className="pb-2 font-mono text-[9px] uppercase leading-relaxed tracking-[0.14em] text-ink/50">
-                  fixed
+                  fixed fee
                   <br />
-                  fee
+                  {AGENCY_PILOT.dossierCount} dossiers
                 </p>
               </div>
               <p className="mt-3 text-sm leading-relaxed text-ink/65">
-                Five dossiers. Forty-eight hours. No subscription.
+                €{AGENCY_PILOT.perDossierEur} per dossier.{" "}
+                {AGENCY_PILOT.turnaroundHours} hours. No subscription.
               </p>
-              <ul className="mt-6 space-y-3 border-t border-ink/15 pt-5">
+              <p className="mt-6 border-t border-ink/15 pt-5 font-mono text-[9px] uppercase tracking-[0.14em] text-ink/45">
+                You get
+              </p>
+              <ul className="mt-3 space-y-3">
                 {included.map((item) => (
                   <li key={item} className="flex gap-2.5 text-xs leading-relaxed text-ink/75">
                     <Check className="mt-0.5 size-3.5 shrink-0 text-ink" aria-hidden />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 border-t border-ink/15 pt-4 font-mono text-[9px] uppercase tracking-[0.14em] text-ink/45">
+                You send
+              </p>
+              <ul className="mt-2 space-y-1.5">
+                {AGENCY_INPUTS.map((item) => (
+                  <li key={item} className="flex gap-2.5 text-xs leading-relaxed text-ink/65">
+                    <span className="mt-1.5 size-1 shrink-0 bg-ink/40" aria-hidden />
                     {item}
                   </li>
                 ))}
@@ -289,7 +311,8 @@ export default function ForAgenciesPage() {
               <div>
                 <p className="kicker text-signal">The process</p>
                 <h2 className="display mt-4 max-w-md text-balance text-4xl sm:text-5xl">
-                  One brief. Forty-eight hours. Five finished reports.
+                  One brief. {AGENCY_PILOT.turnaroundHours} hours.{" "}
+                  {AGENCY_PILOT.dossierCount} finished reports.
                 </h2>
               </div>
               <ol className="grid gap-8 sm:grid-cols-3">
@@ -401,11 +424,15 @@ export default function ForAgenciesPage() {
             <div>
               <p className="kicker text-ink/55">Next step</p>
               <h2 className="display mt-4 max-w-2xl text-balance text-4xl sm:text-6xl">
-                Five prospects. Forty-eight hours. Your name on every page.
+                {AGENCY_PILOT.dossierCount} prospects. €
+                {AGENCY_PILOT.priceEur}. Your name on every page.
               </h2>
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-ink/70">
-                Send the five URLs and your brand details. I will confirm the
-                batch, the turnaround, and the one fixed fee before starting.
+                €{AGENCY_PILOT.priceEur} for {AGENCY_PILOT.dossierCount} dossiers
+                at €{AGENCY_PILOT.perDossierEur} each, delivered in{" "}
+                {AGENCY_PILOT.turnaroundHours} hours. Send the{" "}
+                {AGENCY_PILOT.dossierCount} URLs and your brand details; I will
+                confirm the scope and the fixed fee before starting.
               </p>
             </div>
             <div className="flex flex-col gap-3">
