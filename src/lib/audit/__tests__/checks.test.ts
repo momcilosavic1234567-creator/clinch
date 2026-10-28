@@ -332,6 +332,11 @@ describe("conversion checks", () => {
     expect(ids(result)).toEqual(
       expect.arrayContaining(["conv-thin-content", "conv-no-cta"]),
     );
+    const thin = result.find(
+      (finding) => finding.checkId === "conv-thin-content",
+    );
+    expect(thin?.severity).toBe("high");
+    expect(thin?.impact).toBe("high");
   });
 
   it("describes thin content as a server-rendered word count", () => {
@@ -372,6 +377,9 @@ describe("conversion checks", () => {
         "so client-rendered copy may be missing; verify manually in a browser " +
         "before treating this as a confirmed content problem.",
     );
+    // Unverified copy cannot outrank what the crawler actually observed.
+    expect(thin?.severity).toBe("medium");
+    expect(thin?.impact).toBe("medium");
   });
 
   it("does not treat a short contact page as thin content", () => {

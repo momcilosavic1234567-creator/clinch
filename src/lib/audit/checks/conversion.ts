@@ -41,10 +41,10 @@ function mayHideClientRenderedCopy(page: PageSnapshot): boolean {
   );
 }
 
-function thinContentEvidence(page: PageSnapshot): string {
+function thinContentEvidence(page: PageSnapshot, uncertain: boolean): string {
   const count = page.extracted.wordCount;
   const base = `${count} ${count === 1 ? "word was" : "words were"} extracted from the server-returned HTML.`;
-  if (!mayHideClientRenderedCopy(page)) return base;
+  if (!uncertain) return base;
   return (
     `${base} The page loads ${page.extracted.scripts.length} scripts, so ` +
     "client-rendered copy may be missing; verify manually in a browser before " +
@@ -65,16 +65,20 @@ export function runConversionChecks(
   };
 
   if (!isContactPage && !isProductListing(page)) {
+    // Copy a browser renders later is invisible to the crawler, so a short
+    // server-rendered page is unconfirmed evidence; it cannot outweigh findings
+    // the crawler actually observed.
+    const uncertain = mayHideClientRenderedCopy(page);
     if (extracted.wordCount < 150) {
       add({
         checkId: "conv-thin-content",
-        severity: "high",
+        severity: uncertain ? "medium" : "high",
         title: "The page has little readable text in its HTML",
         why: "The initial HTML gives search engines and visitors little context about what the page covers.",
         fix: "Add concrete detail — what the page covers, examples or evidence, and answers to common questions.",
-        evidence: thinContentEvidence(page),
+        evidence: thinContentEvidence(page, uncertain),
         effort: "involved",
-        impact: "high",
+        impact: uncertain ? "medium" : "high",
       });
     } else if (extracted.wordCount < 300) {
       add({
@@ -83,7 +87,7 @@ export function runConversionChecks(
         title: "The page is thin on readable text",
         why: "A short page may leave visitors unsure what it covers or why it matters.",
         fix: "Add a concrete example, proof point, or objection-handling section.",
-        evidence: thinContentEvidence(page),
+        evidence: thinContentEvidence(page, uncertain),
         effort: "moderate",
         impact: "medium",
       });
