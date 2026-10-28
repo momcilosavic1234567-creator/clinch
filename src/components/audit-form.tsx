@@ -110,7 +110,7 @@ export function AuditForm() {
         JSON.stringify(audit),
       );
     } catch {
-      // The dossier page falls back to the server copy.
+      // The dossier page falls back to browser storage instead.
     }
     setProgress(100);
     setPhase("opening");

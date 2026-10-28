@@ -7,6 +7,7 @@ import {
   Download,
   FileOutput,
   FileText,
+  Info,
   Link2,
   Mail,
   Printer,
@@ -40,7 +41,7 @@ export function DossierView({
         JSON.stringify(audit),
       );
     } catch {
-      // Private browsing can block storage; the server copy still works.
+      // Private browsing can block storage; the dossier still renders in memory.
     }
   }, [audit]);
 
@@ -154,9 +155,11 @@ export function DossierView({
               className="flex items-center gap-1.5 border border-line px-2.5 py-2 font-mono text-[10px] uppercase tracking-[0.1em] text-bone/65 transition hover:border-bone/40 hover:text-bone"
               aria-label={browserOnly ? "Copy local link" : "Copy share link"}
               title={
-                browserOnly
-                  ? "This audit is stored in this browser. Send the PDF to share it."
-                  : undefined
+                isSample
+                  ? "The sample dossier is always available at this link."
+                  : browserOnly
+                    ? "This audit lives in this browser. The link will not open on another device — send the PDF instead."
+                    : "A server copy exists now, but this demo may drop it on redeploy. Send the PDF for a copy that lasts."
               }
             >
               {linkState === "copied" ? (
@@ -211,6 +214,19 @@ export function DossierView({
         </div>
       </header>
 
+      {!isSample && (
+        <div className="no-print border-b border-line bg-ink-soft">
+          <p className="mx-auto flex max-w-6xl items-start gap-2 px-4 py-2 font-mono text-[9px] uppercase leading-relaxed tracking-[0.12em] text-muted sm:px-6">
+            <Info className="mt-px size-3 shrink-0" aria-hidden />
+            <span>
+              {browserOnly
+                ? "Browser copy — saved on this device only. This link will not open on another device; download the JSON or print the PDF to keep a copy."
+                : "Saved by this demo — the server copy can disappear when the site redeploys. Download the JSON or print the PDF for a copy you control."}
+            </span>
+          </p>
+        </div>
+      )}
+
       {isSample && (
         <div className="no-print border-b border-line bg-ink-soft">
           <p className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2 font-mono text-[9px] uppercase tracking-[0.12em] text-muted sm:px-6">
@@ -233,8 +249,8 @@ export function DossierView({
                   {isSample
                     ? "Sample dossier"
                     : browserOnly
-                      ? "Browser copy"
-                      : "Saved audit"}
+                      ? "Browser copy · this device"
+                      : "Audit report"}
                 </p>
                 <p className="mt-1 text-xs text-bone/55">
                   {audit.target.host} · {audit.stats.issuesFound} findings ·{" "}

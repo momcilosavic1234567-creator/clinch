@@ -50,13 +50,17 @@ export function AuditFallback({ id }: { id: string }) {
             <SearchX className="size-6 text-ember" aria-hidden />
             <p className="kicker mt-4 text-ember">Dossier not found</p>
             <h1 className="display mt-3 text-4xl">
-              This report is not on this server.
+              This report is no longer available.
             </h1>
             <p className="mt-4 text-sm leading-relaxed text-bone/60">
-              Audits are stored in the browser that ran them. If you opened
-              this link on another device, cleared storage, or the hosted demo
-              restarted, the report is gone. Running it again takes about a
-              minute.
+              Audits are kept in the browser that ran them, with a temporary
+              server copy on this demo. If you opened this link on another
+              device, cleared browser storage, or the demo redeployed, that
+              copy is gone. Running the audit again takes about a minute.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-bone/60">
+              If you already downloaded the JSON or printed the PDF, that copy
+              still works — nothing here can revoke a file you saved.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
