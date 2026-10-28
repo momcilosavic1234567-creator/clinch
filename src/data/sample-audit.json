@@ -23,11 +23,11 @@
     "label": "Healthcare & clinics",
     "confident": true
   },
-  "score": 70,
+  "score": 71,
   "grade": "C",
   "gradeLabel": "Fixable gaps",
   "verdict": "The crawl found 2 critical issues on publicly reachable pages. They belong at the top of the fix list.",
-  "summary": "Audited 4 pages on northwinddental.example across 169 checks. Strongest area: Conversion readiness (89/100). Weakest: Search visibility (55/100). The highest-leverage fix: A form submits over insecure HTTP.",
+  "summary": "Audited 4 pages on northwinddental.example across 169 checks. Strongest area: Conversion readiness (91/100). Weakest: Search visibility (55/100). The highest-leverage fix: A form submits over insecure HTTP.",
   "categories": [
     {
       "key": "seo",
@@ -68,7 +68,7 @@
     {
       "key": "conversion",
       "label": "Conversion readiness",
-      "score": 89,
+      "score": 91,
       "weight": 0.2,
       "issueCount": 3,
       "criticalCount": 0,
@@ -193,25 +193,6 @@
       "priority": 18
     },
     {
-      "checkId": "conv-thin-content",
-      "category": "conversion",
-      "severity": "high",
-      "title": "The page has almost no substantive content",
-      "why": "Visitors cannot tell what the page covers, and search engines have little evidence of expertise.",
-      "fix": "Add concrete detail — what the page covers, examples or evidence, and answers to common questions.",
-      "evidence": "82 words of primary content were found.",
-      "effort": "involved",
-      "impact": "high",
-      "pagesAffected": [
-        "/about",
-        "/contact",
-        "/services"
-      ],
-      "prevalence": 0.75,
-      "count": 3,
-      "priority": 17.34
-    },
-    {
       "checkId": "sec-insecure-form",
       "category": "security",
       "severity": "critical",
@@ -263,6 +244,24 @@
       "prevalence": 0.75,
       "count": 1,
       "priority": 15.08
+    },
+    {
+      "checkId": "conv-thin-content",
+      "category": "conversion",
+      "severity": "high",
+      "title": "The page has little readable text in its HTML",
+      "why": "The initial HTML gives search engines and visitors little context about what the page covers.",
+      "fix": "Add concrete detail — what the page covers, examples or evidence, and answers to common questions.",
+      "evidence": "82 words were extracted from the server-returned HTML.",
+      "effort": "involved",
+      "impact": "high",
+      "pagesAffected": [
+        "/about",
+        "/services"
+      ],
+      "prevalence": 0.5,
+      "count": 2,
+      "priority": 13.97
     },
     {
       "checkId": "perf-blocking-scripts",
@@ -854,14 +853,14 @@
       "path": "/contact",
       "status": 200,
       "title": "/contact",
-      "score": 0,
+      "score": 6,
       "grade": "F",
       "wordCount": 141,
       "ttfbMs": 2080,
       "htmlKb": 2,
-      "issueCount": 17,
+      "issueCount": 16,
       "criticalCount": 2,
-      "highCount": 4,
+      "highCount": 3,
       "topFinding": "A form submits over insecure HTTP",
       "metrics": {
         "images": 2,
@@ -911,22 +910,22 @@
         "id": "direct",
         "label": "The direct one",
         "subject": "36 fixable issues on northwinddental.example",
-        "body": "Hi,\n\nI ran a public audit of northwinddental.example — 4 pages and 169 checks, all from the outside.\n\nHere is what stood out:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that names the page's main subject and who it is for.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nThe site scores 70/100 overall, with search visibility as the biggest opportunity. 2 of them are critical and visible to every visitor.\n\nI have the full 36-item dossier ready, including the page-by-page evidence and a 30/60/90 plan.\n\nIf you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
+        "body": "Hi,\n\nI ran a public audit of northwinddental.example — 4 pages and 169 checks, all from the outside.\n\nHere is what stood out:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that names the page's main subject and who it is for.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nThe site scores 71/100 overall, with search visibility as the biggest opportunity. 2 of them are critical and visible to every visitor.\n\nI have the full 36-item dossier ready, including the page-by-page evidence and a 30/60/90 plan.\n\nIf you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
       },
       {
         "id": "consultative",
         "label": "The soft touch",
         "subject": "northwinddental.example: what is working and what to fix next",
-        "body": "Hi,\n\nI spent a few minutes looking at northwinddental.example this week. Even the strongest area, Conversion readiness, sits at 89/100, so there is room across the board.\n\nA few things are holding the site back:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that names the page's main subject and who it is for.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nOverall it scores 70/100. The gaps are concentrated in search visibility, and they are specific rather than structural.\n\nI have put the findings, page evidence, and a 30/60/90 plan into a short dossier. If you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nNo pitch attached — just a useful second opinion.\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
+        "body": "Hi,\n\nI spent a few minutes looking at northwinddental.example this week. Conversion readiness is already in good shape at 91/100.\n\nA few things are holding the site back:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that names the page's main subject and who it is for.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nOverall it scores 71/100. The gaps are concentrated in search visibility, and they are specific rather than structural.\n\nI have put the findings, page evidence, and a 30/60/90 plan into a short dossier. If you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nNo pitch attached — just a useful second opinion.\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
       }
     ],
     "followUp": {
       "subject": "Re: 36 fixable issues on northwinddental.example",
       "body": "Hi,\n\nFollowing up on the audit of northwinddental.example. The first thing I would fix is still this: a form submits over insecure http.\n\nThe full dossier is ready whenever you want it — https://northlight.example/call\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
     },
-    "callOpener": "Before this call I ran a public audit of northwinddental.example. It scored 70/100 across 169 checks. The single clearest fix: A form submits over insecure HTTP. I can walk you through the 36 findings and the order I would tackle them in about ten minutes.",
+    "callOpener": "Before this call I ran a public audit of northwinddental.example. It scored 71/100 across 169 checks. The single clearest fix: A form submits over insecure HTTP. I can walk you through the 36 findings and the order I would tackle them in about ten minutes.",
     "talkingPoints": [
-      "northwinddental.example scored 70/100 across 169 checks and 4 pages; 36 distinct issues came up, 2 of them critical.",
+      "northwinddental.example scored 71/100 across 169 checks and 4 pages; 36 distinct issues came up, 2 of them critical.",
       "Search visibility is the weakest area at 55/100.",
       "A form submits over insecure HTTP: 1 form actions use http://."
     ]
@@ -941,7 +940,7 @@
     "brokenLinks": 2,
     "linkChecks": 9,
     "homepageWeightKb": 6250,
-    "durationMs": 9679
+    "durationMs": 9692
   },
   "crawl": {
     "robots": "respected",

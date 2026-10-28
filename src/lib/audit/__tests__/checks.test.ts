@@ -334,6 +334,63 @@ describe("conversion checks", () => {
     );
   });
 
+  it("describes thin content as a server-rendered word count", () => {
+    const result = runConversionChecks(
+      makePage(
+        "<html lang='en'><head><title>Studio</title></head><body><h1>Hi</h1><p>Too little.</p></body></html>",
+      ),
+    );
+    const thin = result.find(
+      (finding) => finding.checkId === "conv-thin-content",
+    );
+
+    expect(thin?.evidence).toBe(
+      "2 words were extracted from the server-returned HTML.",
+    );
+    expect(thin?.evidence).not.toMatch(/manual verification|verify manually/i);
+    expect(thin?.title).not.toMatch(/almost no substantive content/i);
+    expect(thin?.why).not.toMatch(/cannot|can't|unable/i);
+  });
+
+  it("asks for manual verification when scripts could hide client-rendered copy", () => {
+    const scripts = Array.from(
+      { length: 5 },
+      (_, index) => `<script src="/app-${index}.js" async></script>`,
+    ).join("");
+    const result = runConversionChecks(
+      makePage(
+        `<html lang="en"><head><title>Acme</title>${scripts}</head>
+         <body><h1>Loading</h1><p>Short.</p><div id="root"></div></body></html>`,
+      ),
+    );
+    const thin = result.find(
+      (finding) => finding.checkId === "conv-thin-content",
+    );
+
+    expect(thin?.evidence).toBe(
+      "1 word was extracted from the server-returned HTML. The page loads 5 scripts, " +
+        "so client-rendered copy may be missing; verify manually in a browser " +
+        "before treating this as a confirmed content problem.",
+    );
+  });
+
+  it("does not treat a short contact page as thin content", () => {
+    const contact = makePage(
+      `<html lang="en"><head>
+         <title>Contact | Northwind Dental</title>
+         <meta name="description" content="Call the practice, email the front desk, or send the form.">
+       </head><body><main>
+         <h1>Contact us</h1>
+         <p>Call 555-0114 or email hello@example.com and the team will reply within one business day.</p>
+       </main></body></html>`,
+      { url: "https://example.com/contact" },
+    );
+
+    expect(ids(runConversionChecks(contact))).not.toContain(
+      "conv-thin-content",
+    );
+  });
+
   it("passes a clear, substantive page", () => {
     const result = runConversionChecks(
       makePage(GOOD_HTML, { headers: SECURE_HEADERS }),

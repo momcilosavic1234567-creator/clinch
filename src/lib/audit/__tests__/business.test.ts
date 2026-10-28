@@ -71,15 +71,48 @@ describe("business type detection", () => {
     expect(ctaFixFor(saas)).toContain("free trial");
   });
 
-  it("recognises a Shopify store and recommends shopping", () => {
+  it("recognises a Shopify store whose copy also describes a shop", () => {
     const store = page(
       `<title>Trailhead Supply</title>
-       <meta name="description" content="Outdoor gear built for the shoulder season.">
+       <meta name="description" content="Outdoor gear built for the shoulder season. Free shipping over €80.">
        <script src="https://cdn.shopify.com/s/files/theme.js"></script>`,
     );
 
     expect(detectBusinessProfile([store]).type).toBe("ecommerce");
     expect(ctaFixFor(store)).toContain("Shop the collection");
+  });
+
+  it("does not let a Shopify marker alone decide the business type", () => {
+    const unclear = page(
+      `<title>Trailhead Supply</title>
+       <meta name="description" content="Outdoor gear built for the shoulder season.">
+       <script src="https://cdn.shopify.com/s/files/theme.js"></script>`,
+    );
+
+    const profile = detectBusinessProfile([unclear]);
+    expect(profile.type).toBe("unknown");
+    expect(ctaFixFor(unclear)).toBe(UNKNOWN_PROFILE.ctaFix);
+  });
+
+  it("does not infer e-commerce from case-study links on a design consultancy", () => {
+    const consultancy = makePage(
+      `<html lang="en"><head>
+         <title>IDEO | A design and innovation consulting firm</title>
+         <meta name="description" content="We use design to help organisations innovate, grow, and adapt to change.">
+       </head><body>
+         <nav><a href="/work">Work</a><a href="/about">About</a></nav>
+         <a href="/work/store-of-the-future">Store of the future</a>
+         <a href="/work/checkout-reimagined">Checkout reimagined for a global retailer</a>
+         <a href="/work/collections">A new collections experience</a>
+         <p>${"Design research, strategy, and prototyping. ".repeat(30)}</p>
+       </body></html>`,
+    );
+
+    const profile = detectBusinessProfile([consultancy]);
+    expect(profile.type).toBe("agency");
+    const fix = ctaFixFor(consultancy);
+    expect(fix).toContain("Start a project");
+    expect(fix).not.toMatch(/shop|cart|collection/i);
   });
 
   it("recognises a shop from its storefront navigation without a platform marker", () => {
@@ -312,7 +345,7 @@ describe("category advice matrix", () => {
       name: "e-commerce",
       type: "ecommerce",
       html: `<title>Trailhead Supply</title>
-             <meta name="description" content="Outdoor gear built for the shoulder season.">
+             <meta name="description" content="Outdoor gear built for the shoulder season. Free shipping over €80.">
              <script src="https://cdn.shopify.com/s/files/theme.js"></script>`,
       cta: "Shop the collection",
       contact: "shipping and returns",

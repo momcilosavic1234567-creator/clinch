@@ -4,6 +4,44 @@ import { pageFinding } from "./helpers";
 
 export const CONVERSION_PAGE_CHECKS = 2;
 
+// A contact page is expected to be short; its job is to route an inquiry, not
+// to carry long-form copy, so a low word count there is not a content defect.
+const CONTACT_PATH_PATTERN =
+  /\/(?:contact(?:-us)?|contacto|kontakt|contatti|get-in-touch)\/?$/i;
+
+// Frameworks and site builders that commonly render copy in the browser, plus
+// script-heavy pages, can return little text in the HTML itself.
+const CLIENT_RENDERED_MARKERS = new Set([
+  "React",
+  "Next.js",
+  "Nuxt",
+  "Gatsby",
+  "Framer",
+  "Wix",
+  "Squarespace",
+  "Webflow",
+]);
+const SCRIPT_HEAVY_THRESHOLD = 5;
+
+function mayHideClientRenderedCopy(page: PageSnapshot): boolean {
+  return (
+    page.extracted.techMarkers.some((marker) =>
+      CLIENT_RENDERED_MARKERS.has(marker),
+    ) || page.extracted.scripts.length >= SCRIPT_HEAVY_THRESHOLD
+  );
+}
+
+function thinContentEvidence(page: PageSnapshot): string {
+  const count = page.extracted.wordCount;
+  const base = `${count} ${count === 1 ? "word was" : "words were"} extracted from the server-returned HTML.`;
+  if (!mayHideClientRenderedCopy(page)) return base;
+  return (
+    `${base} The page loads ${page.extracted.scripts.length} scripts, so ` +
+    "client-rendered copy may be missing; verify manually in a browser before " +
+    "treating this as a confirmed content problem."
+  );
+}
+
 export function runConversionChecks(
   page: PageSnapshot,
   profile: BusinessProfile = UNKNOWN_PROFILE,
@@ -11,32 +49,35 @@ export function runConversionChecks(
   const findings: Finding[] = [];
   const extracted = page.extracted;
   const isHome = page.path === "/" || page.path === "";
+  const isContactPage = CONTACT_PATH_PATTERN.test(page.path);
   const add = (finding: Omit<Finding, "category" | "pagePath">) => {
     findings.push(pageFinding(page, { ...finding, category: "conversion" }));
   };
 
-  if (extracted.wordCount < 150) {
-    add({
-      checkId: "conv-thin-content",
-      severity: "high",
-      title: "The page has almost no substantive content",
-      why: "Visitors cannot tell what the page covers, and search engines have little evidence of expertise.",
-      fix: "Add concrete detail — what the page covers, examples or evidence, and answers to common questions.",
-      evidence: `${extracted.wordCount} words of primary content were found.`,
-      effort: "involved",
-      impact: "high",
-    });
-  } else if (extracted.wordCount < 300) {
-    add({
-      checkId: "conv-thin-content",
-      severity: "medium",
-      title: "The page is thin on substance",
-      why: "A short page may leave visitors unsure what it covers or why it matters.",
-      fix: "Add a concrete example, proof point, or objection-handling section.",
-      evidence: `${extracted.wordCount} words of primary content were found.`,
-      effort: "moderate",
-      impact: "medium",
-    });
+  if (!isContactPage) {
+    if (extracted.wordCount < 150) {
+      add({
+        checkId: "conv-thin-content",
+        severity: "high",
+        title: "The page has little readable text in its HTML",
+        why: "The initial HTML gives search engines and visitors little context about what the page covers.",
+        fix: "Add concrete detail — what the page covers, examples or evidence, and answers to common questions.",
+        evidence: thinContentEvidence(page),
+        effort: "involved",
+        impact: "high",
+      });
+    } else if (extracted.wordCount < 300) {
+      add({
+        checkId: "conv-thin-content",
+        severity: "medium",
+        title: "The page is thin on readable text",
+        why: "A short page may leave visitors unsure what it covers or why it matters.",
+        fix: "Add a concrete example, proof point, or objection-handling section.",
+        evidence: thinContentEvidence(page),
+        effort: "moderate",
+        impact: "medium",
+      });
+    }
   }
 
   if (extracted.ctas.length === 0 && !extracted.hasFormAction) {

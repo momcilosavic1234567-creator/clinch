@@ -69,7 +69,9 @@ const RULES: TypeRule[] = [
       /\b(?:sold out|out of stock|in stock)\b/,
     ],
     strong: [
-      /\b(?:online store|shop|store)\b/,
+      // "store" and "shop" alone are too common in case-study titles and client
+      // names to prove a shop; the storefront phrases carry that weight instead.
+      /\b(?:online store|storefront|shop online|shop now|buy now)\b/,
       /\bcheckout\b/,
       /\bfree shipping\b/,
       /\b(?:collections?|apparel|jewel(?:l)?ery|merchandise)\b/,
@@ -78,6 +80,7 @@ const RULES: TypeRule[] = [
       /\b(?:cart|returns?|size guide)\b/,
       /\b(?:sale|new arrivals)\b/,
       /\b(?:shipping|delivery)\b/,
+      /\b(?:store|shop)\b/,
     ],
     tech: ["Shopify"],
   },
@@ -112,6 +115,7 @@ const RULES: TypeRule[] = [
     signature: [
       /\b(?:creative|design|digital|web|branding|marketing|advertising|seo) (?:agency|studio)\b/,
       /\b(?:software|app|product) (?:development|engineering) (?:agency|company|studio)\b/,
+      /\b(?:design|digital|brand|innovation|creative|product|technology) (?:and [a-z]+ )?(?:consultancy|consulting)\b/,
     ],
     strong: [
       /\bagency\b/,
@@ -314,21 +318,32 @@ export function detectBusinessProfile(
     }
 
     const strong = countHits(rule.strong, text.allParts);
+    const strongInClaims = countHits(rule.strong, [
+      ...text.titleParts,
+      ...text.claimParts,
+    ]);
     const weak = countHits(rule.weak, text.secondaryParts);
     const techHit =
       rule.tech?.some((marker) => text.tech.has(marker)) ?? false;
+
+    // Link labels and paths alone are too incidental to name a company's
+    // business; a title, description, or CTA has to support the category.
+    const claimEvidence = signatures > 0 || strongInClaims > 0;
+    // A platform marker (e.g. Shopify) corroborates a shop but cannot create one.
+    const techCorroborated = techHit && claimEvidence;
 
     const score =
       signatureScore +
       strong * STRONG_WEIGHT +
       weak * WEAK_WEIGHT +
-      (techHit ? TECH_WEIGHT : 0);
+      (techCorroborated ? TECH_WEIGHT : 0);
 
     // A name is not enough: a lone supporting word or a lone weak label must
-    // never decide the business type. Signatures and platform markers are
-    // specific enough to stand alone.
+    // never decide the business type. Signatures stand on their own, while a
+    // platform marker only corroborates claim-level evidence.
     const supported =
-      signatures > 0 || strong >= 2 || (strong > 0 && weak > 0) || techHit;
+      claimEvidence &&
+      (signatures > 0 || strong >= 2 || weak > 0 || techCorroborated);
 
     if (!supported || score < MIN_SCORE) continue;
     if (rule.requiresSignature && signatures === 0) continue;
