@@ -241,16 +241,22 @@ const WEAK_WEIGHT = 1;
 const TECH_WEIGHT = 5;
 const MIN_SCORE = 5;
 
+// Shop mechanics live in URLs as well as labels: a cart or checkout endpoint is
+// something a case study about shops does not link to from its own navigation.
+const STOREFRONT_ENDPOINT = /\/(?:cart|basket|checkout)(?:\.php)?(?:[/?#]|$)/;
+
 function collectText(pages: PageSnapshot[]): {
   titleParts: string[];
   claimParts: string[];
   secondaryParts: string[];
+  urlParts: string[];
   allParts: string[];
   tech: Set<string>;
 } {
   const titles: string[] = [];
   const claims: string[] = [];
   const secondary: string[] = [];
+  const urls: string[] = [];
   const tech = new Set<string>();
 
   for (const page of pages) {
@@ -267,6 +273,7 @@ function collectText(pages: PageSnapshot[]): {
       ...extracted.externalLinks.map((link) => link.text),
       ...extracted.formFields.map((field) => field.name ?? field.type),
     );
+    urls.push(...extracted.internalLinks.map((link) => link.href));
     for (const marker of extracted.techMarkers) tech.add(marker);
   }
 
@@ -280,11 +287,13 @@ function collectText(pages: PageSnapshot[]): {
   const titleParts = clean(titles);
   const claimParts = clean(claims);
   const secondaryParts = clean(secondary);
+  const urlParts = clean(urls);
 
   return {
     titleParts,
     claimParts,
     secondaryParts,
+    urlParts,
     allParts: [...titleParts, ...claimParts, ...secondaryParts],
     tech,
   };
@@ -333,21 +342,30 @@ export function detectBusinessProfile(
 
     // Link labels and paths alone are too incidental to name a company's
     // business; a title, description, or CTA has to support the category.
-    const claimEvidence = signatures > 0 || strongInClaims > 0;
-    // A platform marker (e.g. Shopify) corroborates a shop but cannot create one.
-    const techCorroborated = techHit && claimEvidence;
+    let claimEvidence = signatures > 0 || strongInClaims > 0;
+    let mechanicScore = 0;
 
     if (rule.requiresStorefront) {
       const mechanics = countHits(rule.signature, text.allParts);
+      const cartEndpoints = countHits([STOREFRONT_ENDPOINT], text.urlParts);
       const hasStorefront =
-        mechanics > 0 || (techHit && strongInClaims > 0);
+        mechanics > 0 || cartEndpoints > 0 || (techHit && strongInClaims > 0);
       if (!hasStorefront) continue;
+      // A working add-to-cart control or cart endpoint is a structural part of a
+      // shop, not incidental copy, so it can carry the category on its own.
+      claimEvidence = true;
+      mechanicScore =
+        mechanics * STRONG_WEIGHT + (cartEndpoints > 0 ? STRONG_WEIGHT : 0);
     }
+
+    // A platform marker (e.g. Shopify) corroborates a shop but cannot create one.
+    const techCorroborated = techHit && claimEvidence;
 
     const score =
       signatureScore +
       strong * STRONG_WEIGHT +
       weak * WEAK_WEIGHT +
+      mechanicScore +
       (techCorroborated ? TECH_WEIGHT : 0);
 
     // A name is not enough: a lone supporting word or a lone weak label must

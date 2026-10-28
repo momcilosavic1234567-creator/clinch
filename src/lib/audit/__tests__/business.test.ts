@@ -177,6 +177,50 @@ describe("business type detection", () => {
     expect(ctaFixFor(shop)).toContain("Shop the collection");
   });
 
+  it("recognises a shop whose home page never uses the word shop in its title", () => {
+    const bookstore = makePage(
+      `<html lang="en"><head>
+         <title>Dogwise.com - The Best Books, DVDs, and eBooks on Dogs</title>
+         <meta name="description" content="The best selection of dog training books, dog nutrition books, and dog competition books anywhere!">
+       </head><body>
+         <nav>
+           <a href="/dog-training-products-and-toys/">Training Products and Toys</a>
+           <a href="/sale-and-damaged-dog-books-dvds/">Sale and Shopworn</a>
+           <a href="/cart.php">Cart with 0 items</a>
+         </nav>
+         <ul>
+           <li><a href="/book/">Book title one</a> <a href="/cart.php?action=add&amp;product_id=2846">Add to Cart</a></li>
+           <li><a href="/book/">Book title two</a> <a href="/cart.php?action=add&amp;product_id=2849">Add to Cart</a></li>
+           <li><a href="/book/">Book title three</a> <a href="/cart.php?action=add&amp;product_id=2848">Add to Cart</a></li>
+         </ul>
+         <footer><a href="/shipping-returns-contact-us/">Shipping, Returns, Privacy Policy, &amp; Contact Us</a></footer>
+         <p>${"Books for every kind of dog owner. ".repeat(20)}</p>
+       </body></html>`,
+    );
+
+    const profile = detectBusinessProfile([bookstore]);
+    expect(profile.type).toBe("ecommerce");
+    expect(profile.confident).toBe(true);
+    expect(profile.ctaFix).toContain("Shop the collection");
+  });
+
+  it("does not call a consultancy a shop over one add-to-cart case-study link", () => {
+    const consultancy = makePage(
+      `<html lang="en"><head>
+         <title>Ridgeline Service Design</title>
+         <meta name="description" content="We help retail teams redesign the moments that matter.">
+       </head><body>
+         <nav><a href="/work">Case studies</a><a href="/contact">Contact</a></nav>
+         <a href="/work/add-to-cart-experiment">The add to cart experiment that lifted conversion</a>
+         <p>${"Research, service design, and delivery support. ".repeat(30)}</p>
+       </body></html>`,
+    );
+
+    const profile = detectBusinessProfile([consultancy]);
+    expect(profile.type).toBe("unknown");
+    expect(profile.ctaFix).toBe(UNKNOWN_PROFILE.ctaFix);
+  });
+
   it("recognises a restaurant and recommends a table reservation", () => {
     const restaurant = makePage(
       `<html lang="en"><head>
