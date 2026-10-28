@@ -391,6 +391,56 @@ describe("conversion checks", () => {
     );
   });
 
+  it("does not treat a product listing as thin content", () => {
+    const cards = Array.from(
+      { length: 7 },
+      (_, index) =>
+        `<li>
+           <a href="/book-${index + 1}/">Book title ${index + 1}</a>
+           <a href="/cart.php?action=add&amp;product_id=${2846 + index}">Add to Cart</a>
+         </li>`,
+    ).join("");
+    const listing = makePage(
+      `<html lang="en"><head>
+         <title>Adoptions, Shelter, and Rescue Dog Books | Dogwise</title>
+         <meta name="description" content="Books on adopting, fostering, and training rescue dogs.">
+       </head><body>
+         <nav><a href="/">Home</a><a href="/cart.php">Cart with 0 items</a></nav>
+         <main>
+           <h1>Adoptions, shelter, and rescue dog books</h1>
+           <ul>${cards}</ul>
+           <p>${"Books for shelters, foster families, and new adopters. ".repeat(30)}</p>
+         </main>
+       </body></html>`,
+      { url: "https://www.example.com/adoptions-shelter-rescue-dog-books/" },
+    );
+
+    expect(ids(runConversionChecks(listing))).not.toContain(
+      "conv-thin-content",
+    );
+  });
+
+  it("still flags a short prose page on a shop that only links its cart", () => {
+    const about = makePage(
+      `<html lang="en"><head>
+         <title>About Dogwise</title>
+         <meta name="description" content="Who we are and why we stock these books.">
+       </head><body>
+         <nav><a href="/">Home</a><a href="/cart.php">Cart with 0 items</a></nav>
+         <main>
+           <h1>About us</h1>
+           <p>${"We have stocked dog books since 1992 and read every one we sell. ".repeat(8)}</p>
+         </main>
+       </body></html>`,
+      { url: "https://www.example.com/about/" },
+    );
+
+    const thin = runConversionChecks(about).find(
+      (finding) => finding.checkId === "conv-thin-content",
+    );
+    expect(thin?.severity).toBe("high");
+  });
+
   it("passes a clear, substantive page", () => {
     const result = runConversionChecks(
       makePage(GOOD_HTML, { headers: SECURE_HEADERS }),

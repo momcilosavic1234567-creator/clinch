@@ -23,6 +23,16 @@ const CLIENT_RENDERED_MARKERS = new Set([
 ]);
 const SCRIPT_HEAVY_THRESHOLD = 5;
 
+// A listing page exists to show items, not to carry prose, and the add-to-cart
+// controls are what separate it from a genuinely short article on a shop.
+const ADD_TO_CART_PATTERN = /\badd to (?:cart|bag)\b/i;
+
+function isProductListing(page: PageSnapshot): boolean {
+  return page.extracted.internalLinks.some((link) =>
+    ADD_TO_CART_PATTERN.test(link.text),
+  );
+}
+
 function mayHideClientRenderedCopy(page: PageSnapshot): boolean {
   return (
     page.extracted.techMarkers.some((marker) =>
@@ -54,7 +64,7 @@ export function runConversionChecks(
     findings.push(pageFinding(page, { ...finding, category: "conversion" }));
   };
 
-  if (!isContactPage) {
+  if (!isContactPage && !isProductListing(page)) {
     if (extracted.wordCount < 150) {
       add({
         checkId: "conv-thin-content",
