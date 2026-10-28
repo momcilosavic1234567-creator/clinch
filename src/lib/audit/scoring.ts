@@ -171,7 +171,7 @@ export function selectTopIssues(issues: Issue[]): Issue[] {
 
 function buildVerdict(score: number, criticalCount: number): string {
   if (criticalCount > 0) {
-    return `The site is losing trust at the moments that decide a sale. ${criticalCount} critical ${
+    return `The site is losing trust at the moments that decide whether a visitor acts. ${criticalCount} critical ${
       criticalCount === 1 ? "issue is" : "issues are"
     } visible to every visitor and belong at the top of the list.`;
   }
@@ -182,12 +182,45 @@ function buildVerdict(score: number, criticalCount: number): string {
     return "A solid site with a handful of visible gaps. Closing them is a short, specific project rather than a rebuild.";
   }
   if (score >= 70) {
-    return "The site works, but several gaps are quietly costing enquiries. The fixes are identifiable and mostly inexpensive.";
+    return "The site works, but several gaps are quietly turning interested visitors away. The fixes are identifiable and mostly inexpensive.";
   }
   if (score >= 55) {
-    return "Real opportunities are leaking at the moments that decide a sale. A focused sprint would move both trust and conversion.";
+    return "Real opportunities are leaking at the moments that decide whether a visitor acts. A focused sprint would move both trust and conversion.";
   }
   return "The site is underperforming on the basics. Treat the first three fixes as urgent, not optional.";
+}
+
+function coverageNote(context: SiteContext): string {
+  const coverage = context.coverage;
+  if (!coverage) return "";
+
+  const parts: string[] = [];
+  if (coverage.pagesSkipped > 0) {
+    parts.push(
+      `${coverage.pagesSkipped} ${
+        coverage.pagesSkipped === 1 ? "page" : "pages"
+      } could not be read`,
+    );
+  }
+  if (coverage.pagesBlockedByRobots > 0) {
+    parts.push(
+      `${coverage.pagesBlockedByRobots} ${
+        coverage.pagesBlockedByRobots === 1 ? "page was" : "pages were"
+      } disallowed by robots.txt`,
+    );
+  }
+  if (coverage.linksUnverified > 0) {
+    parts.push(
+      `${coverage.linksUnverified} ${
+        coverage.linksUnverified === 1 ? "link" : "links"
+      } could not be verified`,
+    );
+  }
+  if (parts.length === 0) return "";
+
+  return ` Coverage note: ${parts.join(
+    "; ",
+  )}. Findings describe only what the crawler could observe.`;
 }
 
 function buildSummary(
@@ -200,11 +233,12 @@ function buildSummary(
   const sorted = [...categories].sort((a, b) => b.score - a.score);
   const strongest = sorted[0];
   const weakest = sorted[sorted.length - 1];
+  const note = coverageNote(context);
 
   if (!topIssue) {
     return `Audited ${pageCount} ${
       pageCount === 1 ? "page" : "pages"
-    } on ${context.host} across ${checksRun} checks. No material issues surfaced: metadata, accessibility, performance, security, and conversion readiness all hold up. Re-run after the next release to catch regressions.`;
+    } on ${context.host} across ${checksRun} checks. No material issues surfaced: metadata, accessibility, performance, security, and conversion readiness all hold up. Re-run after the next significant change to catch regressions.${note}`;
   }
 
   return `Audited ${pageCount} ${
@@ -213,7 +247,7 @@ function buildSummary(
     strongest.label
   } (${strongest.score}/100). Weakest: ${weakest.label} (${
     weakest.score
-  }/100). The highest-leverage fix: ${topIssue.title}.`;
+  }/100). The highest-leverage fix: ${topIssue.title}.${note}`;
 }
 
 function buildActionPlan(issues: Issue[]): ActionPhase[] {

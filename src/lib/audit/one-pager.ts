@@ -1,7 +1,6 @@
 import { CATEGORY_META, type Audit, type Issue, type Severity } from "./types";
 
 export const HEADLINE_COUNT = 3;
-export const FULL_REPORT_PRICE_EUR = 99;
 
 const EVIDENCE_LIMIT = 130;
 const WHY_LIMIT = 135;
@@ -100,7 +99,6 @@ export interface OnePagerModel {
   findings: HeadlineFinding[];
   totalFindings: number;
   remaining: number;
-  price: number;
 }
 
 export function buildOnePager(audit: Audit): OnePagerModel {
@@ -126,6 +124,5 @@ export function buildOnePager(audit: Audit): OnePagerModel {
     })),
     totalFindings: audit.issues.length,
     remaining: Math.max(audit.issues.length - issues.length, 0),
-    price: FULL_REPORT_PRICE_EUR,
   };
 }

@@ -91,6 +91,13 @@ The engine is built to audit public marketing sites, not to probe infrastructure
 
 Limits are intentional. A demo that can scan the internet is not a demo; it is a liability.
 
+### What the audit can and cannot see
+
+- Checks run against the HTML the server returns, plus the response headers. Content that only appears after client-side JavaScript renders is not audited; pages that cannot be read are reported as skipped, blocked, or unverified rather than as defects.
+- The crawl follows up to eight same-origin pages. Findings name the pages they were seen on and quote the evidence behind them; a feature is only called missing when nothing matching was found in the pages that were read.
+- Business type (healthcare, software, e-commerce, hospitality, agency, portfolio) is inferred from titles, descriptions, and calls to action. When the evidence is thin, the audit says "General website" and uses neutral advice instead of guessing.
+- Audits are ephemeral by design: the JSON copy on the server does not survive a serverless redeploy, and the browser copy does not follow the client to another device. Use the JSON export or the printed PDF for a durable record.
+
 ## Quickstart
 
 Requires **Node.js 20.9+**.

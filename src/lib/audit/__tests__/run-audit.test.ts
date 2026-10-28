@@ -82,6 +82,20 @@ describe("runAudit", () => {
     expect(JSON.stringify(audit)).not.toContain("undefined");
   });
 
+  it("reports pages it could not read instead of dropping them silently", async () => {
+    const audit = await runAudit(fixture.base, {
+      allowPrivateHosts: true,
+      maxPages: 5,
+      overallBudgetMs: 20_000,
+    });
+    const coverage = audit.crawl.coverage;
+
+    expect(coverage).toBeDefined();
+    expect(coverage?.pagesSkipped).toBeGreaterThanOrEqual(1);
+    expect(coverage?.pagesBlockedByRobots).toBeGreaterThanOrEqual(1);
+    expect(audit.summary).toMatch(/could not be read|robots\.txt/i);
+  });
+
   it("rejects private hosts before making a request", async () => {
     await expect(runAudit("http://localhost:3000")).rejects.toMatchObject({
       code: "PRIVATE_HOST",

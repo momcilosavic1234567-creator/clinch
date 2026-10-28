@@ -1,16 +1,11 @@
-import type { PageSnapshot } from "./types";
+import type { BusinessType, PageSnapshot } from "./types";
 
-export type BusinessType =
-  | "healthcare"
-  | "software"
-  | "ecommerce"
-  | "hospitality"
-  | "lodging"
-  | "agency"
-  | "unknown";
+export type { BusinessType };
 
 export interface BusinessProfile {
   type: BusinessType;
+  label: string;
+  confident: boolean;
   ctaFix: string;
   contactFix: string;
 }
@@ -21,6 +16,9 @@ interface TypeRule {
   strong: RegExp[];
   weak: RegExp[];
   tech?: string[];
+  // Words like "software" are too broad to infer from navigation alone; the
+  // site has to describe itself that way in its title, description, or CTA.
+  requiresSignature?: boolean;
 }
 
 const RULES: TypeRule[] = [
@@ -47,9 +45,11 @@ const RULES: TypeRule[] = [
   },
   {
     type: "software",
+    requiresSignature: true,
     signature: [
       /\bsaas\b/,
-      /\bsoftware\b/,
+      // "software engineer" is a job title, not a product category.
+      /\bsoftware\b(?!\s+(?:engineers?|engineering|developers?|development))/,
       /\b(?:free trial|start your free trial)\b/,
       /\b(?:book|request|schedule) a demo\b/,
     ],
@@ -72,7 +72,7 @@ const RULES: TypeRule[] = [
       /\b(?:online store|shop|store)\b/,
       /\bcheckout\b/,
       /\bfree shipping\b/,
-      /\b(?:collection|apparel|jewel(?:l)?ery|merchandise)\b/,
+      /\b(?:collections?|apparel|jewel(?:l)?ery|merchandise)\b/,
     ],
     weak: [
       /\b(?:cart|returns?|size guide)\b/,
@@ -127,10 +127,30 @@ const RULES: TypeRule[] = [
       /\b(?:work with us|let'?s talk)\b/,
     ],
   },
+  {
+    type: "portfolio",
+    signature: [
+      /\b(?:personal|design|photography|illustration|writing) portfolio\b/,
+      /\bhire me\b/,
+      /\b(?:freelance|independent) (?:[a-z]+ )?(?:designer|developer|photographer|illustrator|writer|copywriter|consultant)\b/,
+      /\b(?:product|ux|ui|interior|graphic|brand|web|motion) designer\b/,
+    ],
+    strong: [
+      /\b(?:photographer|illustrator|copywriter|motion designer|3d artist|visual artist)\b/,
+      /\b(?:personal website|personal site|about me|my story)\b/,
+      /\bavailable for (?:freelance|work|commissions|projects)\b/,
+    ],
+    weak: [
+      /\b(?:portfolio|gallery|commissions?)\b/,
+      /\b(?:projects?|case stud(?:y|ies))\b/,
+    ],
+  },
 ];
 
 const UNKNOWN: BusinessProfile = {
   type: "unknown",
+  label: "General website",
+  confident: false,
   ctaFix:
     "Add one clear next step for visitors — a contact link, a phone number, or an inquiry form — and repeat it above the fold and at the end of the page.",
   contactFix:
@@ -142,6 +162,8 @@ export const UNKNOWN_PROFILE = UNKNOWN;
 const PROFILES: Record<Exclude<BusinessType, "unknown">, BusinessProfile> = {
   healthcare: {
     type: "healthcare",
+    label: "Healthcare & clinics",
+    confident: true,
     ctaFix:
       "Add one primary action above the fold — “Book an appointment” — that opens the booking page or dials the practice.",
     contactFix:
@@ -149,6 +171,8 @@ const PROFILES: Record<Exclude<BusinessType, "unknown">, BusinessProfile> = {
   },
   software: {
     type: "software",
+    label: "Software & SaaS",
+    confident: true,
     ctaFix:
       "Add one primary action above the fold — “Start a free trial” or “Book a demo” — that leads to a signup form or a demo booking.",
     contactFix:
@@ -156,6 +180,8 @@ const PROFILES: Record<Exclude<BusinessType, "unknown">, BusinessProfile> = {
   },
   ecommerce: {
     type: "ecommerce",
+    label: "E-commerce",
+    confident: true,
     ctaFix:
       "Add one primary action above the fold — “Shop the collection” or “Add to cart” — that leads into the product catalogue.",
     contactFix:
@@ -163,6 +189,8 @@ const PROFILES: Record<Exclude<BusinessType, "unknown">, BusinessProfile> = {
   },
   lodging: {
     type: "lodging",
+    label: "Hotels & lodging",
+    confident: true,
     ctaFix:
       "Add one primary action above the fold — “Book a room” or “Check availability” — that opens the booking engine.",
     contactFix:
@@ -170,6 +198,8 @@ const PROFILES: Record<Exclude<BusinessType, "unknown">, BusinessProfile> = {
   },
   hospitality: {
     type: "hospitality",
+    label: "Restaurants & hospitality",
+    confident: true,
     ctaFix:
       "Add one primary action above the fold — “Book a table” or “Check availability” — that opens the reservation flow.",
     contactFix:
@@ -177,10 +207,21 @@ const PROFILES: Record<Exclude<BusinessType, "unknown">, BusinessProfile> = {
   },
   agency: {
     type: "agency",
+    label: "Agencies & studios",
+    confident: true,
     ctaFix:
       "Add one primary action above the fold — “Start a project” or “Request a quote” — that opens an inquiry form.",
     contactFix:
       "Add a project inquiry link, an email address, and a contact page to the header and footer.",
+  },
+  portfolio: {
+    type: "portfolio",
+    label: "Portfolios & personal sites",
+    confident: true,
+    ctaFix:
+      "Add one primary action above the fold — “Hire me” or “Get in touch” — that opens your contact form or email.",
+    contactFix:
+      "Put an email address, a short contact form, and links to your profiles in the header, footer, and a contact page.",
   },
 };
 
@@ -192,24 +233,27 @@ const TECH_WEIGHT = 5;
 const MIN_SCORE = 5;
 
 function collectText(pages: PageSnapshot[]): {
-  title: string;
-  primary: string;
-  secondary: string;
-  all: string;
+  titleParts: string[];
+  claimParts: string[];
+  secondaryParts: string[];
+  allParts: string[];
   tech: Set<string>;
 } {
   const titles: string[] = [];
-  const primary: string[] = [];
+  const claims: string[] = [];
   const secondary: string[] = [];
   const tech = new Set<string>();
 
   for (const page of pages) {
     const extracted = page.extracted;
     titles.push(extracted.title, extracted.ogTitle);
-    primary.push(extracted.metaDescription, extracted.ogDescription);
+    claims.push(
+      extracted.metaDescription,
+      extracted.ogDescription,
+      ...extracted.ctas,
+    );
     secondary.push(
       extracted.path.replace(/[/_-]+/g, " "),
-      ...extracted.ctas,
       ...extracted.internalLinks.map((link) => link.text),
       ...extracted.externalLinks.map((link) => link.text),
       ...extracted.formFields.map((field) => field.name ?? field.type),
@@ -217,25 +261,30 @@ function collectText(pages: PageSnapshot[]): {
     for (const marker of extracted.techMarkers) tech.add(marker);
   }
 
-  const normalize = (parts: string[]) =>
-    parts.join(" ").toLowerCase().replace(/\s+/g, " ").trim();
+  const normalize = (value: string | null | undefined) =>
+    (value ?? "").toLowerCase().replace(/\s+/g, " ").trim();
+  const clean = (parts: Array<string | null | undefined>) =>
+    parts.map(normalize).filter(Boolean);
 
-  const titleText = normalize(titles);
-  const primaryText = normalize(primary);
-  const weakText = normalize(secondary);
-  const allText = `${titleText} ${primaryText} ${weakText}`;
+  // Matching each field on its own avoids phrases invented by concatenation,
+  // e.g. a “Personal software” link next to a “Product engineers” link.
+  const titleParts = clean(titles);
+  const claimParts = clean(claims);
+  const secondaryParts = clean(secondary);
 
   return {
-    title: titleText,
-    primary: primaryText,
-    secondary: weakText,
-    all: allText,
+    titleParts,
+    claimParts,
+    secondaryParts,
+    allParts: [...titleParts, ...claimParts, ...secondaryParts],
     tech,
   };
 }
 
-function countHits(patterns: RegExp[], text: string): number {
-  return patterns.filter((pattern) => pattern.test(text)).length;
+function countHits(patterns: RegExp[], parts: string[]): number {
+  return patterns.filter((pattern) =>
+    parts.some((part) => pattern.test(part)),
+  ).length;
 }
 
 interface Candidate {
@@ -255,17 +304,17 @@ export function detectBusinessProfile(
     let signatures = 0;
     let signatureScore = 0;
     for (const pattern of rule.signature) {
-      if (pattern.test(text.title)) {
+      if (text.titleParts.some((part) => pattern.test(part))) {
         signatures += 1;
         signatureScore += TITLE_SIGNATURE_WEIGHT;
-      } else if (pattern.test(text.all)) {
+      } else if (text.claimParts.some((part) => pattern.test(part))) {
         signatures += 1;
         signatureScore += SIGNATURE_WEIGHT;
       }
     }
 
-    const strong = countHits(rule.strong, text.all);
-    const weak = countHits(rule.weak, text.secondary);
+    const strong = countHits(rule.strong, text.allParts);
+    const weak = countHits(rule.weak, text.secondaryParts);
     const techHit =
       rule.tech?.some((marker) => text.tech.has(marker)) ?? false;
 
@@ -282,6 +331,7 @@ export function detectBusinessProfile(
       signatures > 0 || strong >= 2 || (strong > 0 && weak > 0) || techHit;
 
     if (!supported || score < MIN_SCORE) continue;
+    if (rule.requiresSignature && signatures === 0) continue;
 
     candidates.push({
       type: rule.type,

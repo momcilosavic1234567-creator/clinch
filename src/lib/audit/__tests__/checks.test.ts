@@ -146,6 +146,36 @@ describe("SEO checks", () => {
     expect(ids(result)).toContain("seo-noindex");
   });
 
+  it("writes search advice without assuming a local service business", () => {
+    const result = runSeoChecks(
+      makePage(
+        "<html lang='en'><head><title>Lee Robinson</title><meta name='description' content='Developer and writer.'><meta property='og:title' content='x'><meta property='og:image' content='x'></head><body><h1>Writing</h1></body></html>",
+      ),
+    );
+    const copy = result
+      .filter((finding) =>
+        ["seo-title-short", "seo-structured-data-missing"].includes(
+          finding.checkId,
+        ),
+      )
+      .map((finding) => `${finding.why} ${finding.fix}`)
+      .join(" ");
+
+    expect(copy).not.toMatch(/\bcity\b|\baddress\b|\bselling\b/i);
+    expect(copy).not.toMatch(/LocalBusiness or Organization/);
+  });
+
+  it("keeps thin-content advice relevant to non-commercial sites", () => {
+    const result = runConversionChecks(
+      makePage("<html><body><h1>Hi</h1><p>Too little.</p></body></html>"),
+    );
+    const thin = result.find(
+      (finding) => finding.checkId === "conv-thin-content",
+    );
+
+    expect(thin?.fix).not.toMatch(/\bservices\b|\bpricing\b/i);
+  });
+
   it("flags generic homepage titles", () => {
     const result = runSeoChecks(
       makePage(
@@ -329,6 +359,22 @@ describe("site checks", () => {
         "conv-outdated-copyright",
       ]),
     );
+  });
+
+  it("describes a missing contact route without denying the links that exist", () => {
+    const page = makePage(
+      `<html lang="en"><head><title>Alex Rivera</title></head><body>
+         <h1>Alex Rivera</h1>
+         <a href="https://www.linkedin.com/in/alex-rivera">LinkedIn</a>
+         <p>${"Building thoughtful interfaces. ".repeat(40)}</p>
+       </body></html>`,
+    );
+
+    const finding = runSiteChecks([page], makeContext([page])).find(
+      (item) => item.checkId === "conv-no-contact",
+    );
+
+    expect(finding?.title).toBe("There is no direct contact route");
   });
 
   it("passes pages that share no problems", () => {

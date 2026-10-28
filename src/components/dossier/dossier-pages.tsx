@@ -135,6 +135,29 @@ export function DossierPages({ audit }: { audit: Audit }) {
   const categoryLabel = (key: Issue["category"]) =>
     categories.find((category) => category.key === key)?.label ?? key;
   const criticalHigh = stats.criticalCount + stats.highCount;
+  const coverage = audit.crawl.coverage;
+  const notChecked: string[] = [];
+  if (coverage) {
+    if (coverage.pagesSkipped > 0) {
+      notChecked.push(
+        `${coverage.pagesSkipped} ${
+          coverage.pagesSkipped === 1 ? "page" : "pages"
+        } could not be read`,
+      );
+    }
+    if (coverage.pagesBlockedByRobots > 0) {
+      notChecked.push(
+        `${coverage.pagesBlockedByRobots} disallowed by robots.txt`,
+      );
+    }
+    if (coverage.linksUnverified > 0) {
+      notChecked.push(
+        `${coverage.linksUnverified} ${
+          coverage.linksUnverified === 1 ? "link" : "links"
+        } could not be verified`,
+      );
+    }
+  }
 
   return (
     <div className="dossier-stack space-y-6 lg:space-y-8">
@@ -333,6 +356,14 @@ export function DossierPages({ audit }: { audit: Audit }) {
               ))}
             </dl>
             <div className="mt-5 space-y-2.5 border-t border-ink/10 pt-4 text-[11px] leading-relaxed text-ink/70">
+              {audit.business && (
+                <p>
+                  <span className="font-medium text-ink">Business type:</span>{" "}
+                  {audit.business.confident
+                    ? audit.business.label
+                    : "not confidently detected, so the advice stays general."}
+                </p>
+              )}
               <p>
                 <span className="font-medium text-ink">Strongest:</span>{" "}
                 {strongest.label} at {strongest.score}/100.
@@ -360,6 +391,12 @@ export function DossierPages({ audit }: { audit: Audit }) {
                   : "robots.txt unavailable"}
                 , same origin only.
               </p>
+              {notChecked.length > 0 && (
+                <p>
+                  <span className="font-medium text-ink">Not checked:</span>{" "}
+                  {notChecked.join(", ")}.
+                </p>
+              )}
             </div>
           </aside>
         </div>
@@ -384,6 +421,10 @@ export function DossierPages({ audit }: { audit: Audit }) {
               </div>
             ))}
           </div>
+          <p className="mt-3 text-[10px] leading-relaxed text-ink/55">
+            Scope: public pages only. Pages behind a login, disallowed by
+            robots.txt, or that timed out are not audited.
+          </p>
         </div>
 
         <SheetFooter audit={audit} section="Summary" />

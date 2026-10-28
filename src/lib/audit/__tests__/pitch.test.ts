@@ -164,6 +164,30 @@ describe("generatePitch", () => {
     }
   });
 
+  it("does not presume a software release cycle on a clean site", () => {
+    const clean = generatePitch({
+      target,
+      brand,
+      scoring: buildScoring({
+        findings: [],
+        pages,
+        context,
+        checksRun: 89,
+        durationMs: 8200,
+      }),
+      stats: {
+        pagesCrawled: 2,
+        checksRun: 89,
+        issuesFound: 0,
+        criticalCount: 0,
+        highCount: 0,
+      },
+    });
+
+    expect(clean.emails[0].subject).not.toMatch(/release|deploy/i);
+    expect(clean.emails[0].body).not.toMatch(/release|deploy/i);
+  });
+
   it("grounds the direct email in the prospect and the observed findings", () => {
     const [direct] = pitch().emails;
 

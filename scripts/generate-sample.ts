@@ -45,6 +45,15 @@ async function main() {
     linkChecks: 9,
     homepageAssetBytes: 6_400_000,
     homepageAssetCount: 19,
+    coverage: {
+      pagesAttempted: pages.length,
+      pagesSkipped: 0,
+      pagesBlockedByRobots: 0,
+      linksDiscovered: 9,
+      linksVerified: 9,
+      linksUnverified: 0,
+      budgetExhausted: false,
+    },
   };
 
   const audit = composeAudit({

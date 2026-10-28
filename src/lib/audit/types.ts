@@ -1,3 +1,29 @@
+export type BusinessType =
+  | "healthcare"
+  | "software"
+  | "ecommerce"
+  | "hospitality"
+  | "lodging"
+  | "agency"
+  | "portfolio"
+  | "unknown";
+
+export interface AuditBusiness {
+  type: BusinessType;
+  label: string;
+  confident: boolean;
+}
+
+export interface CrawlCoverage {
+  pagesAttempted: number;
+  pagesSkipped: number;
+  pagesBlockedByRobots: number;
+  linksDiscovered: number;
+  linksVerified: number;
+  linksUnverified: number;
+  budgetExhausted: boolean;
+}
+
 export const CATEGORIES = [
   "seo",
   "accessibility",
@@ -177,6 +203,7 @@ export interface SiteContext {
   linkChecks: number;
   homepageAssetBytes: number | null;
   homepageAssetCount: number;
+  coverage?: CrawlCoverage;
 }
 
 export interface Finding {
@@ -283,6 +310,7 @@ export interface Audit {
   durationMs: number;
   target: AuditTarget;
   brand: Brand;
+  business?: AuditBusiness;
   score: number;
   grade: string;
   gradeLabel: string;
@@ -300,6 +328,7 @@ export interface Audit {
     pagesLimit: number;
     userAgent: string;
     tech: string[];
+    coverage?: CrawlCoverage;
   };
 }
 

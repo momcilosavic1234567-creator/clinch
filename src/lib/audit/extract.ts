@@ -9,7 +9,7 @@ import type {
 } from "./types";
 
 const CTA_PATTERN =
-  /\b(book|call|get|start|request|schedule|contact|quote|buy|shop|order|try|demo|consult|appointment|enquire|inquire|download|apply|subscribe|join)\b/i;
+  /\b(book|reserve|reservations?|booking|call|get|start|request|schedule|contact|quote|buy|shop|order|view|browse|try|demo|consult|appointment|enquire|inquire|download|apply|subscribe|join|register|donate)\b|\bfind a table\b|\b(?:view|see) (?:the )?menu\b|\bsign ?up\b/i;
 
 const SOCIAL_PROOF_PATTERN =
   /\b(testimonial|reviews?|trusted by|case stud(?:y|ies)|rated|stars?|google reviews?|yelp)\b/i;

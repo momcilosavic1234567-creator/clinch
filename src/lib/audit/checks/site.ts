@@ -118,10 +118,12 @@ export function runSiteChecks(
         checkId: "conv-no-contact",
         category: "conversion",
         severity: "medium",
-        title: "There is no visible way to contact the business",
-        why: "A ready-to-buy visitor has to hunt for a phone number or form, and most will leave instead.",
+        title: "There is no direct contact route",
+        why: "Visitors who want to email, call, or send a message have to leave the site and work out how to reach the business.",
         fix: profile.contactFix,
-        evidence: "No phone, email, contact link, or booking path was found.",
+        evidence: `No phone, email, contact link, or booking path was found on the ${pages.length} ${
+          pages.length === 1 ? "page" : "pages"
+        } read.`,
         effort: "quick",
         impact: "high",
       }),
@@ -137,7 +139,9 @@ export function runSiteChecks(
         title: "There is no visible social proof",
         why: "Testimonials, reviews, and ratings reduce the perceived risk of choosing an unfamiliar business.",
         fix: "Add a short testimonial, a review rating, or a “trusted by” line near the primary call to action.",
-        evidence: "No testimonials, reviews, ratings, or case studies were found.",
+        evidence: `No testimonials, reviews, ratings, or case studies were found on the ${pages.length} ${
+          pages.length === 1 ? "page" : "pages"
+        } read.`,
         effort: "quick",
         impact: "medium",
       }),

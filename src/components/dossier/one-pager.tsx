@@ -154,7 +154,7 @@ export function OnePager({
                 developer.
               </p>
               <p className="mt-2.5 text-[13px] font-semibold">
-                Full report — €{model.price}
+                The full report is available from {senderName}.
               </p>
             </div>
             <div className="text-right">

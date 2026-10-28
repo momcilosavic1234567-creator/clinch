@@ -105,6 +105,36 @@ describe("extractPage", () => {
     expect(page.socialProof).toBe(true);
   });
 
+  it("recognises reservation language as a call to action", () => {
+    const restaurant = extractPage(
+      `<html lang="en"><head><title>Gramercy Tavern</title></head><body>
+         <nav><a href="/reservations">Reservations</a></nav>
+         <main>
+           <h1>Dinner in the dining room</h1>
+           <a href="/reservations">Reservations</a>
+           <button>Find A Table</button>
+         </main>
+       </body></html>`,
+      "https://gramercytavern.example/",
+    );
+
+    expect(restaurant.ctas.join(" ").toLowerCase()).toContain("reservations");
+  });
+
+  it("recognises a portfolio's profile actions as calls to action", () => {
+    const portfolio = extractPage(
+      `<html lang="en"><head><title>Alex Rivera</title></head><body>
+         <main>
+           <h1>Alex Rivera</h1>
+           <a href="/resume.pdf">View Full Résumé</a>
+         </main>
+       </body></html>`,
+      "https://alexrivera.example/",
+    );
+
+    expect(portfolio.ctas.join(" ")).toContain("View Full Résumé");
+  });
+
   it("audits form labels and accessible names", () => {
     const email = page.formFields.find((field) => field.name === "email");
     const phone = page.formFields.find((field) => field.name === "phone");

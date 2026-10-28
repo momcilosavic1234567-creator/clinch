@@ -112,7 +112,7 @@ function cleanSubject(
 ): string {
   return scoring.score >= 90
     ? `${host} passed a ${checksRun}-check audit`
-    : `A note on ${host} before your next release`;
+    : `A note on ${host} before your next update`;
 }
 
 function buildDirect(input: PitchInput, isClean: boolean): PitchEmail {
@@ -134,7 +134,7 @@ I ran a public audit of ${host} — ${pages} ${pageWord(pages)} and ${checks} ch
 
 The short version: it holds up. Nothing critical or high-severity surfaced, and the site scores ${scoring.score}/100. ${weakest.label} is the only area with any room left, at ${weakest.score}/100.
 
-That is rare. The useful next step is protecting the result: a re-audit after your next significant release, and a second look before any paid campaign.
+That is rare. The useful next step is protecting the result: a re-audit after your next significant change, and a second look before any paid campaign.
 
 ${nextStep(brand)}
 
@@ -187,7 +187,7 @@ function buildConsultative(input: PitchInput, isClean: boolean): PitchEmail {
     return {
       id: "consultative",
       label: "The soft touch",
-      subject: `${host}: a second opinion before your next release`,
+      subject: `${host}: a second opinion before your next update`,
       body: tidy(`Hi,
 
 I spent a few minutes looking at ${host} this week. The honest summary is that it is in better shape than most sites I review: ${pages} ${pageWord(

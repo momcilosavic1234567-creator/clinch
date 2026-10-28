@@ -2,7 +2,7 @@
   "version": 1,
   "id": "sample",
   "createdAt": "2026-10-25T09:12:00.000Z",
-  "durationMs": 9674,
+  "durationMs": 9679,
   "target": {
     "inputUrl": "https://northwinddental.example",
     "url": "https://northwinddental.example/",
@@ -18,10 +18,15 @@
     "bookingUrl": "https://northlight.example/call",
     "accent": "#FF5C35"
   },
+  "business": {
+    "type": "healthcare",
+    "label": "Healthcare & clinics",
+    "confident": true
+  },
   "score": 70,
   "grade": "C",
   "gradeLabel": "Fixable gaps",
-  "verdict": "The site is losing trust at the moments that decide a sale. 2 critical issues are visible to every visitor and belong at the top of the list.",
+  "verdict": "The site is losing trust at the moments that decide whether a visitor acts. 2 critical issues are visible to every visitor and belong at the top of the list.",
   "summary": "Audited 4 pages on northwinddental.example across 169 checks. Strongest area: Conversion readiness (89/100). Weakest: Search visibility (55/100). The highest-leverage fix: A form submits over insecure HTTP.",
   "categories": [
     {
@@ -94,7 +99,7 @@
       "severity": "critical",
       "title": "The page has no title tag",
       "why": "Search results and browser tabs have nothing to identify the page, which suppresses clicks even when it ranks.",
-      "fix": "Add a unique 30–60 character title that leads with the service and the location.",
+      "fix": "Add a unique 30–60 character title that names the page's main subject and who it is for.",
       "evidence": "No <title> element was found.",
       "effort": "quick",
       "impact": "high",
@@ -192,8 +197,8 @@
       "category": "conversion",
       "severity": "high",
       "title": "The page has almost no substantive content",
-      "why": "Visitors cannot judge the offer, and search engines have little evidence of expertise.",
-      "fix": "Add specific services, proof, pricing or process detail, and answers to common questions.",
+      "why": "Visitors cannot tell what the page covers, and search engines have little evidence of expertise.",
+      "fix": "Add concrete detail — what the page covers, examples or evidence, and answers to common questions.",
       "evidence": "82 words of primary content were found.",
       "effort": "involved",
       "impact": "high",
@@ -229,7 +234,7 @@
       "severity": "critical",
       "title": "The page has no title tag",
       "why": "Search results and browser tabs have nothing to identify the page, which suppresses clicks even when it ranks.",
-      "fix": "Add a unique 30–60 character title that leads with the service and the location.",
+      "fix": "Add a unique 30–60 character title that names the page's main subject and who it is for.",
       "evidence": "No <title> element was found.",
       "effort": "quick",
       "impact": "high",
@@ -282,8 +287,8 @@
       "category": "seo",
       "severity": "high",
       "title": "There is no meta description",
-      "why": "Google will write its own snippet, so the page loses control of the sales pitch in search results.",
-      "fix": "Write a 120–155 character summary with the outcome the customer gets and a reason to click.",
+      "why": "Google will write its own snippet, so the page loses control of how it is described in search results.",
+      "fix": "Write a 120–155 character summary of what the page offers and why it is worth visiting.",
       "evidence": "No meta description was found.",
       "effort": "quick",
       "impact": "high",
@@ -498,7 +503,7 @@
       "severity": "medium",
       "title": "The title is likely to be truncated in search results",
       "why": "Google typically cuts titles around 60 characters, hiding the differentiating part of the message.",
-      "fix": "Tighten the title to 60 characters or fewer, keeping the service and location first.",
+      "fix": "Tighten the title to 60 characters or fewer, keeping the main subject first.",
       "evidence": "The title is 91 characters: “Home | Northwind Family Dental | Family, Cosmetic and Emergency Dentist in Portland, Oregon”.",
       "effort": "quick",
       "impact": "medium",
@@ -516,7 +521,7 @@
       "title": "There is no visible social proof",
       "why": "Testimonials, reviews, and ratings reduce the perceived risk of choosing an unfamiliar business.",
       "fix": "Add a short testimonial, a review rating, or a “trusted by” line near the primary call to action.",
-      "evidence": "No testimonials, reviews, ratings, or case studies were found.",
+      "evidence": "No testimonials, reviews, ratings, or case studies were found on the 4 pages read.",
       "effort": "quick",
       "impact": "medium",
       "pagesAffected": [],
@@ -747,8 +752,8 @@
       "category": "seo",
       "severity": "low",
       "title": "No structured data for search engines",
-      "why": "Without schema markup, search engines lack explicit business details for rich results.",
-      "fix": "Add LocalBusiness or Organization JSON-LD with the name, address, phone, hours, and services.",
+      "why": "Without schema markup, search engines lack explicit details about the organisation or person behind the site.",
+      "fix": "Add appropriate JSON-LD — for example Organization for a company or Person for a personal site — with the name, description, and relevant profile links.",
       "evidence": "No application/ld+json block was found.",
       "effort": "moderate",
       "impact": "medium",
@@ -874,7 +879,7 @@
       "title": "Stop the leaks",
       "items": [
         "A form submits over insecure HTTP — Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.",
-        "The page has no title tag — Add a unique 30–60 character title that leads with the service and the location."
+        "The page has no title tag — Add a unique 30–60 character title that names the page's main subject and who it is for."
       ]
     },
     {
@@ -906,13 +911,13 @@
         "id": "direct",
         "label": "The direct one",
         "subject": "36 fixable issues on northwinddental.example",
-        "body": "Hi,\n\nI ran a public audit of northwinddental.example — 4 pages and 169 checks, all from the outside.\n\nHere is what stood out:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that leads with the service and the location.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nThe site scores 70/100 overall, with search visibility as the biggest opportunity. 2 of them are critical and visible to every visitor.\n\nI have the full 36-item dossier ready, including the page-by-page evidence and a 30/60/90 plan.\n\nIf you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
+        "body": "Hi,\n\nI ran a public audit of northwinddental.example — 4 pages and 169 checks, all from the outside.\n\nHere is what stood out:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that names the page's main subject and who it is for.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nThe site scores 70/100 overall, with search visibility as the biggest opportunity. 2 of them are critical and visible to every visitor.\n\nI have the full 36-item dossier ready, including the page-by-page evidence and a 30/60/90 plan.\n\nIf you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
       },
       {
         "id": "consultative",
         "label": "The soft touch",
         "subject": "northwinddental.example: what is working and what to fix next",
-        "body": "Hi,\n\nI spent a few minutes looking at northwinddental.example this week. Even the strongest area, Conversion readiness, sits at 89/100, so there is room across the board.\n\nA few things are holding the site back:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that leads with the service and the location.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nOverall it scores 70/100. The gaps are concentrated in search visibility, and they are specific rather than structural.\n\nI have put the findings, page evidence, and a 30/60/90 plan into a short dossier. If you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nNo pitch attached — just a useful second opinion.\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
+        "body": "Hi,\n\nI spent a few minutes looking at northwinddental.example this week. Even the strongest area, Conversion readiness, sits at 89/100, so there is room across the board.\n\nA few things are holding the site back:\n\n1. A form submits over insecure HTTP\n   Evidence: 1 form actions use http://.\n   Fix: Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.\n\n2. The page has no title tag\n   Evidence: No <title> element was found.\n   Fix: Add a unique 30–60 character title that names the page's main subject and who it is for.\n\n3. 6 images lack alt text\n   Evidence: 6 of 8 images have no alt attribute.\n   Fix: Describe informative images in alt text; use alt=\"\" for purely decorative images.\n\nOverall it scores 70/100. The gaps are concentrated in search visibility, and they are specific rather than structural.\n\nI have put the findings, page evidence, and a 30/60/90 plan into a short dossier. If you would like to walk through it, grab a 15-minute slot here: https://northlight.example/call\n\nNo pitch attached — just a useful second opinion.\n\nMina Kovac\nNorthlight Studio\nhttps://northlight.example/"
       }
     ],
     "followUp": {
@@ -936,7 +941,7 @@
     "brokenLinks": 2,
     "linkChecks": 9,
     "homepageWeightKb": 6250,
-    "durationMs": 9674
+    "durationMs": 9679
   },
   "crawl": {
     "robots": "respected",
@@ -944,6 +949,15 @@
     "userAgent": "ClinchAuditBot/1.0 (+https://github.com/momcilosavic1234567-creator/clinch; respectful audit bot)",
     "tech": [
       "Google Analytics 4"
-    ]
+    ],
+    "coverage": {
+      "pagesAttempted": 4,
+      "pagesSkipped": 0,
+      "pagesBlockedByRobots": 0,
+      "linksDiscovered": 9,
+      "linksVerified": 9,
+      "linksUnverified": 0,
+      "budgetExhausted": false
+    }
   }
 }

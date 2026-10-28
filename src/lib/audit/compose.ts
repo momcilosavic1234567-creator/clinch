@@ -102,6 +102,11 @@ export function composeAudit(input: ComposeAuditInput): Audit {
     durationMs,
     target,
     brand,
+    business: {
+      type: business.type,
+      label: business.label,
+      confident: business.confident,
+    },
     score: scoring.score,
     grade: scoring.grade,
     gradeLabel: scoring.gradeLabel,
@@ -119,6 +124,7 @@ export function composeAudit(input: ComposeAuditInput): Audit {
       pagesLimit: input.pagesLimit,
       userAgent: AUDIT_USER_AGENT,
       tech: input.tech,
+      ...(context.coverage ? { coverage: context.coverage } : {}),
     },
   };
 

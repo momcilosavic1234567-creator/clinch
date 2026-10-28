@@ -236,6 +236,10 @@ export async function crawlSite(
   const pages: PageSnapshot[] = [homePage];
   const crawledKeys = new Set([canonicalKey(homepageUrl)]);
   const queuedKeys = new Set<string>();
+  const robotsBlockedKeys = new Set<string>();
+  let pagesAttempted = 1;
+  let pagesSkipped = 0;
+  let budgetExhausted = false;
 
   emit(pageEvent(homePage, 16));
 
@@ -255,10 +259,13 @@ export async function crawlSite(
         }
         if (url.origin !== origin) continue;
         if (ASSET_PATH.test(url.pathname)) continue;
-        if (!robotsAllows(robots, url)) continue;
 
         url.hash = "";
         const key = canonicalKey(url);
+        if (!robotsAllows(robots, url)) {
+          robotsBlockedKeys.add(key);
+          continue;
+        }
         if (crawledKeys.has(key) || queuedKeys.has(key)) continue;
 
         const score =
@@ -283,8 +290,18 @@ export async function crawlSite(
     );
   };
 
-  const crawlPage = async (candidateUrl: string): Promise<PageSnapshot | null> => {
-    if (remaining() < 1_500) return null;
+  type PageSkip =
+    | "unreachable"
+    | "status"
+    | "not-html"
+    | "off-origin"
+    | "duplicate"
+    | "budget";
+
+  const crawlPage = async (
+    candidateUrl: string,
+  ): Promise<{ page: PageSnapshot } | { skip: PageSkip }> => {
+    if (remaining() < 1_500) return { skip: "budget" };
 
     let result: FetchTextResult;
     try {
@@ -294,27 +311,29 @@ export async function crawlSite(
         userAgent: AUDIT_USER_AGENT,
       });
     } catch {
-      return null;
+      return { skip: "unreachable" };
     }
 
-    if (result.status < 200 || result.status >= 300) return null;
-    if (!isHtml(result)) return null;
+    if (result.status < 200 || result.status >= 300) return { skip: "status" };
+    if (!isHtml(result)) return { skip: "not-html" };
 
     const finalUrl = new URL(result.url);
-    if (finalUrl.origin !== origin) return null;
-    if (crawledKeys.has(canonicalKey(finalUrl))) return null;
+    if (finalUrl.origin !== origin) return { skip: "off-origin" };
+    if (crawledKeys.has(canonicalKey(finalUrl))) return { skip: "duplicate" };
 
     return {
-      url: result.url,
-      path: finalUrl.pathname || "/",
-      status: result.status,
-      finalUrl: result.url,
-      headers: result.headers,
-      bodyBytes: result.bytes,
-      ttfbMs: result.ttfbMs,
-      assetBytes: null,
-      assetCount: 0,
-      extracted: extractPage(result.body, result.url),
+      page: {
+        url: result.url,
+        path: finalUrl.pathname || "/",
+        status: result.status,
+        finalUrl: result.url,
+        headers: result.headers,
+        bodyBytes: result.bytes,
+        ttfbMs: result.ttfbMs,
+        assetBytes: null,
+        assetCount: 0,
+        extracted: extractPage(result.body, result.url),
+      },
     };
   };
 
@@ -323,14 +342,24 @@ export async function crawlSite(
     Math.max(0, (robots.crawlDelay ?? 0) * 1000),
   );
 
-  while (pages.length < maxPages && remaining() > 2_000) {
+  while (pages.length < maxPages) {
+    if (remaining() <= 2_000) {
+      budgetExhausted = true;
+      break;
+    }
     const next = collectCandidates()[0];
     if (!next) break;
 
     queuedKeys.add(next.key);
-    const page = await crawlPage(next.url);
-    if (!page) continue;
+    pagesAttempted += 1;
+    const outcome = await crawlPage(next.url);
+    if ("skip" in outcome) {
+      if (outcome.skip === "budget") budgetExhausted = true;
+      if (outcome.skip !== "duplicate") pagesSkipped += 1;
+      continue;
+    }
 
+    const page = outcome.page;
     crawledKeys.add(canonicalKey(new URL(page.url)));
     pages.push(page);
 
@@ -391,9 +420,15 @@ export async function crawlSite(
 
   const brokenLinks: BrokenLink[] = [];
   let linkChecks = 0;
+  let linksUnverified = 0;
 
-  for (const [, target] of targets) {
-    if (remaining() < 1_200) break;
+  for (const [index, entry] of targets.entries()) {
+    const target = entry[1];
+    if (remaining() < 1_200) {
+      linksUnverified += targets.length - index;
+      budgetExhausted = true;
+      break;
+    }
 
     try {
       const probe = await probeUrl(target.url, {
@@ -411,7 +446,8 @@ export async function crawlSite(
         });
       }
     } catch {
-      linkChecks += 1;
+      // A probe that never returned is unverified, not evidence of a broken link.
+      linksUnverified += 1;
     }
   }
 
@@ -468,6 +504,15 @@ export async function crawlSite(
     linkChecks,
     homepageAssetBytes: assetCount > 0 ? assetBytes : null,
     homepageAssetCount: assetCount,
+    coverage: {
+      pagesAttempted,
+      pagesSkipped,
+      pagesBlockedByRobots: robotsBlockedKeys.size,
+      linksDiscovered: targets.length,
+      linksVerified: linkChecks,
+      linksUnverified,
+      budgetExhausted,
+    },
   };
 
   return {

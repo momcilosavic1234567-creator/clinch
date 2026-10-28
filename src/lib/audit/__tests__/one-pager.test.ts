@@ -150,11 +150,11 @@ describe("buildOnePager", () => {
     ]);
   });
 
-  it("counts what is left for the full report", () => {
+  it("leaves the full-report price to the agency", () => {
     const model = buildOnePager(makeAudit());
     expect(model.totalFindings).toBe(4);
     expect(model.remaining).toBe(1);
-    expect(model.price).toBe(99);
+    expect(model).not.toHaveProperty("price");
   });
 
   it("carries human labels instead of enum keys", () => {

@@ -32,7 +32,10 @@ function makePage(path = "/", html?: string): PageSnapshot {
   };
 }
 
-function makeContext(pages: PageSnapshot[]): SiteContext {
+function makeContext(
+  pages: PageSnapshot[],
+  overrides: Partial<SiteContext> = {},
+): SiteContext {
   return {
     inputUrl: "https://example.com",
     startUrl: "https://example.com/",
@@ -43,6 +46,7 @@ function makeContext(pages: PageSnapshot[]): SiteContext {
     linkChecks: 0,
     homepageAssetBytes: pages[0]?.assetBytes ?? null,
     homepageAssetCount: pages[0]?.assetCount ?? 0,
+    ...overrides,
   };
 }
 
@@ -444,6 +448,50 @@ describe("buildScoring", () => {
     expect(home?.metrics.h1Count).toBe(1);
     expect(home?.htmlKb).toBeGreaterThan(0);
     expect(home?.grade).toMatch(/^[A-F]$/);
+  });
+
+  it("describes critical findings without assuming a sales funnel", () => {
+    const result = score([
+      finding({
+        checkId: "sec-https",
+        category: "security",
+        severity: "critical",
+        title: "The site is served over plain HTTP",
+      }),
+    ]);
+
+    expect(result.verdict).not.toMatch(/\b(?:sale|sales|revenue|buyer)\b/i);
+  });
+
+  it("states when the crawl could not read every page or link", () => {
+    const pages = [makePage("/")];
+    const result = buildScoring({
+      findings: [],
+      pages,
+      context: makeContext(pages, {
+        coverage: {
+          pagesAttempted: 3,
+          pagesSkipped: 2,
+          pagesBlockedByRobots: 1,
+          linksDiscovered: 5,
+          linksVerified: 3,
+          linksUnverified: 2,
+          budgetExhausted: false,
+        },
+      }),
+      checksRun: 49,
+      durationMs: 1200,
+    });
+
+    expect(result.summary).toContain("could not be read");
+    expect(result.summary).toContain("could not be verified");
+    expect(result.summary).toContain("robots.txt");
+  });
+
+  it("keeps the clean-site summary free of coverage caveats when nothing was skipped", () => {
+    const result = score([]);
+
+    expect(result.summary).not.toMatch(/could not be read|coverage note/i);
   });
 
   it("writes a summary grounded in the crawl and the worst issue", () => {
