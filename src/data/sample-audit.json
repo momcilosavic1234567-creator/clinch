@@ -26,7 +26,7 @@
   "score": 70,
   "grade": "C",
   "gradeLabel": "Fixable gaps",
-  "verdict": "The site is losing trust at the moments that decide whether a visitor acts. 2 critical issues are visible to every visitor and belong at the top of the list.",
+  "verdict": "The crawl found 2 critical issues on publicly reachable pages. They belong at the top of the fix list.",
   "summary": "Audited 4 pages on northwinddental.example across 169 checks. Strongest area: Conversion readiness (89/100). Weakest: Search visibility (55/100). The highest-leverage fix: A form submits over insecure HTTP.",
   "categories": [
     {
@@ -876,7 +876,7 @@
     {
       "key": "now",
       "window": "Days 0–30",
-      "title": "Stop the leaks",
+      "title": "Fix the criticals",
       "items": [
         "A form submits over insecure HTTP — Point the form action at an HTTPS endpoint and redirect all HTTP traffic to HTTPS.",
         "The page has no title tag — Add a unique 30–60 character title that names the page's main subject and who it is for."
@@ -896,7 +896,7 @@
     {
       "key": "later",
       "window": "Days 60–90",
-      "title": "Compound the gains",
+      "title": "Finish the backlog",
       "items": [
         "There is no Content Security Policy — Start with a report-only policy, then enforce a strict allowlist for scripts, styles, and frames.",
         "The site can be framed by another origin — Send X-Frame-Options: DENY or add frame-ancestors 'none' to the CSP.",

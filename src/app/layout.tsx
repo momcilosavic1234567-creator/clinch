@@ -25,7 +25,7 @@ const jetbrains = JetBrains_Mono({
 
 const title = "Clinch — Win the pitch before the first call";
 const description =
-  "Clinch turns any prospect's website into a white-label audit, a 30/60/90 plan, and outreach that sells it — in about a minute. Built for web agencies.";
+  "Clinch turns any prospect's website into a white-label audit, a 30/60/90 plan, and outreach you can edit and send — in about a minute. Built for web agencies.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -102,11 +102,20 @@ function SheetHeader({
   );
 }
 
-function SheetFooter({ audit, section }: { audit: Audit; section: string }) {
+function SheetFooter({
+  audit,
+  section,
+  isSample = false,
+}: {
+  audit: Audit;
+  section: string;
+  isSample?: boolean;
+}) {
   return (
     <div className="mt-12 flex flex-wrap items-center justify-between gap-2 border-t border-ink/15 pt-4 font-mono text-[8px] uppercase tracking-[0.14em] text-ink/40">
       <span>
-        Prepared by {audit.brand.agencyName} · Confidential
+        Prepared by {audit.brand.agencyName} ·{" "}
+        {isSample ? "Fictional demonstration · not a real client" : "Confidential"}
       </span>
       <span>{section}</span>
     </div>
@@ -123,7 +132,13 @@ function IssueBadge({ severity }: { severity: Severity }) {
   );
 }
 
-export function DossierPages({ audit }: { audit: Audit }) {
+export function DossierPages({
+  audit,
+  isSample = false,
+}: {
+  audit: Audit;
+  isSample?: boolean;
+}) {
   const { brand, target, stats, topIssues, categories, pages } = audit;
   const date = formatDate(audit.createdAt);
   const senderLine = [brand.senderName, brand.agencyName]
@@ -182,7 +197,7 @@ export function DossierPages({ audit }: { audit: Audit }) {
           <div className="text-right font-mono text-[8px] uppercase leading-relaxed tracking-[0.16em] text-ink/45">
             <p>Prospect audit</p>
             <p>{date}</p>
-            <p>Confidential</p>
+            <p>{isSample ? "Fictional demo" : "Confidential"}</p>
           </div>
         </header>
 
@@ -267,6 +282,14 @@ export function DossierPages({ audit }: { audit: Audit }) {
             </div>
           ))}
         </div>
+
+        {isSample && (
+          <p className="mt-8 border border-ink/25 px-3 py-2 font-mono text-[8px] uppercase leading-relaxed tracking-[0.12em] text-ink/60">
+            Sample dossier · fictional demonstration. The prospect, the
+            evidence, and the agency details are invented to show the format.
+            Not a real client, audit result, or proof of commercial traction.
+          </p>
+        )}
 
         <div className="mt-auto pt-10">
           <div className="flex flex-wrap items-center justify-between gap-2 border-t border-ink/15 pt-4 font-mono text-[8px] uppercase tracking-[0.14em] text-ink/40">
@@ -427,7 +450,7 @@ export function DossierPages({ audit }: { audit: Audit }) {
           </p>
         </div>
 
-        <SheetFooter audit={audit} section="Summary" />
+        <SheetFooter audit={audit} section="Summary" isSample={isSample} />
       </Sheet>
 
       <Sheet>
@@ -494,7 +517,7 @@ export function DossierPages({ audit }: { audit: Audit }) {
           ))}
         </div>
 
-        <SheetFooter audit={audit} section="Priority fixes" />
+        <SheetFooter audit={audit} section="Priority fixes" isSample={isSample} />
       </Sheet>
 
       <Sheet>
@@ -551,7 +574,7 @@ export function DossierPages({ audit }: { audit: Audit }) {
           })}
         </div>
 
-        <SheetFooter audit={audit} section="Full register" />
+        <SheetFooter audit={audit} section="Full register" isSample={isSample} />
       </Sheet>
 
       <Sheet>
@@ -561,8 +584,8 @@ export function DossierPages({ audit }: { audit: Audit }) {
           host={target.host}
         />
         <p className="mt-5 max-w-2xl text-sm leading-relaxed text-ink/70">
-          A sequence, not a wish list. Stop active leaks first, rebuild the
-          foundation second, then compound the gains.
+          A sequence, not a wish list. Critical issues first, the foundation
+          second, then the remaining fixes.
         </p>
 
         <div className="dossier-plan-grid mt-8 grid gap-6 md:grid-cols-3">
@@ -612,7 +635,7 @@ export function DossierPages({ audit }: { audit: Audit }) {
           <BrandMark brand={brand} />
         </div>
 
-        <SheetFooter audit={audit} section="Action plan" />
+        <SheetFooter audit={audit} section="Action plan" isSample={isSample} />
       </Sheet>
     </div>
   );

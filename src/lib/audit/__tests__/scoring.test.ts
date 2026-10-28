@@ -6,6 +6,7 @@ import {
   gradeForScore,
   issueDeduction,
 } from "@/lib/audit/scoring";
+import { CATEGORIES } from "@/lib/audit/types";
 import type {
   Finding,
   PageSnapshot,
@@ -461,6 +462,55 @@ describe("buildScoring", () => {
     ]);
 
     expect(result.verdict).not.toMatch(/\b(?:sale|sales|revenue|buyer)\b/i);
+  });
+
+  it("keeps every verdict free of unmeasured business-outcome claims", () => {
+    const highsPerCategory = (count: number): Finding[] =>
+      CATEGORIES.flatMap((category) =>
+        Array.from({ length: count }, (_, index) =>
+          finding({
+            checkId: `${category}-issue-${index}`,
+            category,
+            severity: "high",
+            impact: "medium",
+          }),
+        ),
+      );
+
+    const bands = [
+      { label: "A", findings: [], expected: [90, 100] },
+      { label: "B", findings: highsPerCategory(2), expected: [80, 89] },
+      { label: "C", findings: highsPerCategory(3), expected: [70, 79] },
+      { label: "D", findings: highsPerCategory(4), expected: [55, 69] },
+      { label: "F", findings: highsPerCategory(6), expected: [0, 54] },
+      {
+        label: "critical",
+        findings: [
+          finding({
+            checkId: "sec-https",
+            category: "security",
+            severity: "critical",
+          }),
+        ],
+        expected: [0, 100],
+      },
+    ] as const;
+
+    const outcomeClaim =
+      /losing trust|leaking|turning .*visitors away|underperforming|costing|costs? (?:you|them|the business)/i;
+
+    for (const band of bands) {
+      const result = score(band.findings as Finding[]);
+      expect(result.score).toBeGreaterThanOrEqual(band.expected[0]);
+      expect(result.score).toBeLessThanOrEqual(band.expected[1]);
+      expect(result.verdict).not.toMatch(outcomeClaim);
+    }
+  });
+
+  it("labels a mid-range grade without implying financial loss", () => {
+    for (const value of [60, 70, 80, 95]) {
+      expect(gradeForScore(value).label).not.toMatch(/costly|cost/i);
+    }
   });
 
   it("states when the crawl could not read every page or link", () => {

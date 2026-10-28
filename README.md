@@ -73,7 +73,7 @@ The crawl streams NDJSON progress events to the form, so the UI shows pages, che
 | Security & trust | 15% | 9 |
 | Conversion readiness | 20% | 9 |
 
-Grades: **A** ≥ 90 (Pitch-ready), **B** ≥ 80 (Solid foundation), **C** ≥ 70 (Fixable gaps), **D** ≥ 55 (Costly gaps), **F** < 55 (Urgent).
+Grades: **A** ≥ 90 (Pitch-ready), **B** ≥ 80 (Solid foundation), **C** ≥ 70 (Fixable gaps), **D** ≥ 55 (Notable gaps), **F** < 55 (Urgent).
 
 Severity controls ordering; prevalence (how many audited pages a finding touches) and category weight control the score.
 

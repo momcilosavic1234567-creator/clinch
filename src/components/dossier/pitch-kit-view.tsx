@@ -9,7 +9,13 @@ function senderLine(audit: Audit): string {
     .join(" · ");
 }
 
-export function PitchKitView({ audit }: { audit: Audit }) {
+export function PitchKitView({
+  audit,
+  isSample = false,
+}: {
+  audit: Audit;
+  isSample?: boolean;
+}) {
   const { brand, pitch } = audit;
   const signature = [brand.senderName, brand.agencyName, brand.website]
     .filter(Boolean)
@@ -29,6 +35,11 @@ export function PitchKitView({ audit }: { audit: Audit }) {
         <p className="mt-4 inline-block border border-line px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
           Not part of the client-facing PDF
         </p>
+        {isSample && (
+          <p className="ml-2 mt-4 inline-block border border-signal/50 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-signal">
+            Fictional demonstration · invented prospect and agency
+          </p>
+        )}
       </header>
 
       <div className="mt-9 space-y-6">

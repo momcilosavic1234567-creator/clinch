@@ -54,7 +54,7 @@ export function gradeForScore(score: number): { grade: string; label: string } {
   if (score >= 90) return { grade: "A", label: "Pitch-ready" };
   if (score >= 80) return { grade: "B", label: "Solid foundation" };
   if (score >= 70) return { grade: "C", label: "Fixable gaps" };
-  if (score >= 55) return { grade: "D", label: "Costly gaps" };
+  if (score >= 55) return { grade: "D", label: "Notable gaps" };
   return { grade: "F", label: "Urgent" };
 }
 
@@ -171,9 +171,11 @@ export function selectTopIssues(issues: Issue[]): Issue[] {
 
 function buildVerdict(score: number, criticalCount: number): string {
   if (criticalCount > 0) {
-    return `The site is losing trust at the moments that decide whether a visitor acts. ${criticalCount} critical ${
-      criticalCount === 1 ? "issue is" : "issues are"
-    } visible to every visitor and belong at the top of the list.`;
+    return `The crawl found ${criticalCount} critical ${
+      criticalCount === 1 ? "issue" : "issues"
+    } on publicly reachable pages. ${
+      criticalCount === 1 ? "It belongs" : "They belong"
+    } at the top of the fix list.`;
   }
   if (score >= 90) {
     return "The fundamentals are in place. What remains is polish, and small refinements here will compound.";
@@ -182,12 +184,12 @@ function buildVerdict(score: number, criticalCount: number): string {
     return "A solid site with a handful of visible gaps. Closing them is a short, specific project rather than a rebuild.";
   }
   if (score >= 70) {
-    return "The site works, but several gaps are quietly turning interested visitors away. The fixes are identifiable and mostly inexpensive.";
+    return "The site works, but the crawl found gaps across several areas. Each finding names its evidence and the fix.";
   }
   if (score >= 55) {
-    return "Real opportunities are leaking at the moments that decide whether a visitor acts. A focused sprint would move both trust and conversion.";
+    return "Gaps showed up across several areas of the site. A focused sprint on the first three fixes is a reasonable next step.";
   }
-  return "The site is underperforming on the basics. Treat the first three fixes as urgent, not optional.";
+  return "The site misses several basics. The first three fixes are the ones to start with.";
 }
 
 function coverageNote(context: SiteContext): string {
@@ -276,7 +278,7 @@ function buildActionPlan(issues: Issue[]): ActionPhase[] {
     {
       key: "now",
       window: "Days 0–30",
-      title: "Stop the leaks",
+      title: "Fix the criticals",
       items: compact(
         now,
         "No urgent fixes. Keep dependencies and certificates current so the site stays protected.",
@@ -294,7 +296,7 @@ function buildActionPlan(issues: Issue[]): ActionPhase[] {
     {
       key: "later",
       window: "Days 60–90",
-      title: "Compound the gains",
+      title: "Finish the backlog",
       items: compact(
         later,
         "Run a quarterly public audit and compare the score against this baseline.",

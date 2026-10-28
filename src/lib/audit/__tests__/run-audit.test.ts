@@ -94,6 +94,11 @@ describe("runAudit", () => {
     expect(coverage?.pagesSkipped).toBeGreaterThanOrEqual(1);
     expect(coverage?.pagesBlockedByRobots).toBeGreaterThanOrEqual(1);
     expect(audit.summary).toMatch(/could not be read|robots\.txt/i);
+
+    // A robots-blocked page is never fetched, audited, or cited as a defect.
+    expect(audit.pages.some((page) => page.path === "/private")).toBe(false);
+    const findingCopy = JSON.stringify(audit.issues) + JSON.stringify(audit.actionPlan);
+    expect(findingCopy).not.toMatch(/Internal notes|\/private/);
   });
 
   it("rejects private hosts before making a request", async () => {

@@ -61,7 +61,7 @@ export function OnePager({
           </div>
           <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-bone/60">
             Website check · {model.date}
-            {isSample ? " · sample" : ""}
+            {isSample ? " · fictional demo" : ""}
           </p>
         </header>
 
@@ -94,7 +94,7 @@ export function OnePager({
 
         <div className="px-6 pt-5 print:px-0">
           <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-ink/40">
-            Three things costing you customers
+            Three things to fix first
           </p>
         </div>
 
@@ -168,6 +168,12 @@ export function OnePager({
             {audit.stats.checksRun} automated checks · no access to your server,
             analytics, or customer data
           </p>
+          {isSample && (
+            <p className="mt-2 border border-ink/25 px-2 py-1.5 font-mono text-[7.5px] uppercase leading-[1.7] tracking-[0.08em] text-ink/55">
+              Fictional demonstration · invented prospect and agency. Not a real
+              client, audit result, or proof of commercial traction.
+            </p>
+          )}
         </footer>
       </article>
     </div>

@@ -406,6 +406,35 @@ describe("site checks", () => {
     expect(finding?.title).toBe("There is no direct contact route");
   });
 
+  it("does not turn unverified links or unread pages into confirmed defects", () => {
+    const home = makePage(
+      `<html lang="en"><head><title>Juniper House</title></head><body>
+         <h1>Juniper House</h1>
+         <p>${"A calm place to spend an afternoon. ".repeat(30)}</p>
+       </body></html>`,
+    );
+    const context = makeContext([home], {
+      brokenLinks: [],
+      linkChecks: 1,
+      coverage: {
+        pagesAttempted: 5,
+        pagesSkipped: 2,
+        pagesBlockedByRobots: 1,
+        linksDiscovered: 7,
+        linksVerified: 1,
+        linksUnverified: 5,
+        budgetExhausted: false,
+      },
+    });
+
+    const findings = runSiteChecks([home], context);
+    const contact = findings.find((item) => item.checkId === "conv-no-contact");
+
+    expect(ids(findings)).not.toContain("seo-broken-links");
+    expect(contact?.evidence).toContain("1 page read");
+    expect(contact?.evidence).not.toMatch(/skipped|blocked|unverified|robots/i);
+  });
+
   it("passes pages that share no problems", () => {
     const first = makePage(GOOD_HTML, { headers: SECURE_HEADERS });
     const second = makePage(

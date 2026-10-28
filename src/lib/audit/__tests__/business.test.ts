@@ -4,7 +4,7 @@ import { runConversionChecks } from "@/lib/audit/checks/conversion";
 import { runSiteChecks } from "@/lib/audit/checks/site";
 import { composeAudit } from "@/lib/audit/compose";
 import { extractPage } from "@/lib/audit/extract";
-import type { PageSnapshot, SiteContext } from "@/lib/audit/types";
+import type { BusinessType, PageSnapshot, SiteContext } from "@/lib/audit/types";
 
 function makePage(html: string, url = "https://example.com/"): PageSnapshot {
   return {
@@ -267,6 +267,117 @@ describe("business type detection", () => {
     const first = detectBusinessProfile([dental]);
     const second = detectBusinessProfile([dental]);
     expect(first).toEqual(second);
+  });
+});
+
+describe("category advice matrix", () => {
+  function contactFixFor(pageSnapshot: PageSnapshot): string {
+    const profile = detectBusinessProfile([pageSnapshot]);
+    const finding = runSiteChecks(
+      [pageSnapshot],
+      makeContext([pageSnapshot]),
+      profile,
+    ).find((item) => item.checkId === "conv-no-contact");
+    expect(finding).toBeDefined();
+    return finding!.fix;
+  }
+
+  const cases: Array<{
+    name: string;
+    type: BusinessType;
+    html: string;
+    cta: string;
+    contact: string;
+    foreign: RegExp;
+  }> = [
+    {
+      name: "healthcare",
+      type: "healthcare",
+      html: `<title>Northwind Family Dental | Portland Dentist</title>
+             <meta name="description" content="Family and cosmetic dentistry in North Portland.">`,
+      cta: "Book an appointment",
+      contact: "practice address",
+      foreign: /free trial|add to cart|book a table|book a room|start a project|hire me/i,
+    },
+    {
+      name: "software",
+      type: "software",
+      html: `<title>Acme — Workflow automation software</title>
+             <meta name="description" content="Acme is software for operations teams. Start a free trial.">`,
+      cta: "Start a free trial",
+      contact: "demo booking path",
+      foreign: /appointment|add to cart|book a table|book a room|start a project|hire me/i,
+    },
+    {
+      name: "e-commerce",
+      type: "ecommerce",
+      html: `<title>Trailhead Supply</title>
+             <meta name="description" content="Outdoor gear built for the shoulder season.">
+             <script src="https://cdn.shopify.com/s/files/theme.js"></script>`,
+      cta: "Shop the collection",
+      contact: "shipping and returns",
+      foreign: /appointment|free trial|book a table|book a room|start a project|hire me/i,
+    },
+    {
+      name: "hospitality",
+      type: "hospitality",
+      html: `<title>Osteria Rossi | Italian restaurant in Brooklyn</title>
+             <meta name="description" content="Seasonal Italian cuisine and a short wine list.">`,
+      cta: "Book a table",
+      contact: "opening hours",
+      foreign: /appointment|free trial|add to cart|book a room|start a project|hire me/i,
+    },
+    {
+      name: "agency",
+      type: "agency",
+      html: `<title>Bramble Studio — Brand and web design</title>
+             <meta name="description" content="A design studio building brand identities and websites.">`,
+      cta: "Start a project",
+      contact: "project inquiry",
+      foreign: /appointment|free trial|add to cart|book a table|book a room|hire me/i,
+    },
+    {
+      name: "portfolio",
+      type: "portfolio",
+      html: `<title>Ada Lindqvist — Product Designer</title>
+             <meta name="description" content="Independent product designer working with small teams. Selected work and case studies. Hire me.">`,
+      cta: "Hire me",
+      contact: "links to your profiles",
+      foreign: /appointment|free trial|add to cart|book a table|book a room|start a project/i,
+    },
+    {
+      name: "unknown",
+      type: "unknown",
+      html: `<title>Example Domain</title>
+             <meta name="description" content="This domain is for use in illustrative examples.">`,
+      cta: UNKNOWN_PROFILE.ctaFix,
+      contact: UNKNOWN_PROFILE.contactFix,
+      foreign: /appointment|free trial|add to cart|book a table|book a room|start a project|hire me/i,
+    },
+  ];
+
+  for (const testCase of cases) {
+    it(`gives ${testCase.name} sites only ${testCase.name} advice`, () => {
+      const snapshot = page(testCase.html);
+      const profile = detectBusinessProfile([snapshot]);
+      const cta = ctaFixFor(snapshot);
+      const contact = contactFixFor(snapshot);
+
+      expect(profile.type).toBe(testCase.type);
+      expect(cta).toContain(testCase.cta);
+      expect(contact).toContain(testCase.contact);
+      expect(cta).not.toMatch(testCase.foreign);
+      expect(contact).not.toMatch(testCase.foreign);
+    });
+  }
+
+  it("keeps the unknown fallback identical to the shared neutral profile", () => {
+    const fallback = cases.find((testCase) => testCase.name === "unknown")!;
+    const snapshot = page(fallback.html);
+
+    expect(detectBusinessProfile([snapshot])).toEqual(UNKNOWN_PROFILE);
+    expect(ctaFixFor(snapshot)).toBe(UNKNOWN_PROFILE.ctaFix);
+    expect(contactFixFor(snapshot)).toBe(UNKNOWN_PROFILE.contactFix);
   });
 });
 
