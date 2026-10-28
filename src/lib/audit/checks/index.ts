@@ -1,3 +1,4 @@
+import { UNKNOWN_PROFILE, type BusinessProfile } from "../business";
 import type { Finding, PageSnapshot } from "../types";
 import {
   ACCESSIBILITY_PAGE_CHECKS,
@@ -23,13 +24,16 @@ export { SITE_CHECKS };
 
 const HOMEPAGE_ONLY_CHECKS = 2;
 
-export function runPageChecks(page: PageSnapshot): Finding[] {
+export function runPageChecks(
+  page: PageSnapshot,
+  profile: BusinessProfile = UNKNOWN_PROFILE,
+): Finding[] {
   return [
     ...runSeoChecks(page),
     ...runAccessibilityChecks(page),
     ...runPerformanceChecks(page),
     ...runSecurityChecks(page),
-    ...runConversionChecks(page),
+    ...runConversionChecks(page, profile),
   ];
 }
 

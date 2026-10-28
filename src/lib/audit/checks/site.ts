@@ -1,3 +1,4 @@
+import { UNKNOWN_PROFILE, type BusinessProfile } from "../business";
 import type { Finding, PageSnapshot, SiteContext } from "../types";
 import { humanList, siteFinding } from "./helpers";
 
@@ -6,6 +7,7 @@ export const SITE_CHECKS = 7;
 export function runSiteChecks(
   pages: PageSnapshot[],
   context: SiteContext,
+  profile: BusinessProfile = UNKNOWN_PROFILE,
 ): Finding[] {
   const findings: Finding[] = [];
   if (pages.length === 0) return findings;
@@ -118,7 +120,7 @@ export function runSiteChecks(
         severity: "medium",
         title: "There is no visible way to contact the business",
         why: "A ready-to-buy visitor has to hunt for a phone number or form, and most will leave instead.",
-        fix: "Put a phone number, email, or booking link in the header, footer, and a dedicated contact page.",
+        fix: profile.contactFix,
         evidence: "No phone, email, contact link, or booking path was found.",
         effort: "quick",
         impact: "high",

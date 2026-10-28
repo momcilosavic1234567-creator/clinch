@@ -1,9 +1,13 @@
+import { UNKNOWN_PROFILE, type BusinessProfile } from "../business";
 import type { Finding, PageSnapshot } from "../types";
 import { pageFinding } from "./helpers";
 
 export const CONVERSION_PAGE_CHECKS = 2;
 
-export function runConversionChecks(page: PageSnapshot): Finding[] {
+export function runConversionChecks(
+  page: PageSnapshot,
+  profile: BusinessProfile = UNKNOWN_PROFILE,
+): Finding[] {
   const findings: Finding[] = [];
   const extracted = page.extracted;
   const isHome = page.path === "/" || page.path === "";
@@ -41,7 +45,7 @@ export function runConversionChecks(page: PageSnapshot): Finding[] {
       severity: isHome ? "high" : "medium",
       title: "There is no clear call to action",
       why: "Interested visitors reach the end of the page with no obvious next step, so they leave.",
-      fix: "Add one primary action with a specific verb and outcome, such as “Book a same-week appointment”.",
+      fix: profile.ctaFix,
       evidence: "No action-oriented link or button was found.",
       effort: "quick",
       impact: "high",

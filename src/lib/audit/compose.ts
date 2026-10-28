@@ -1,4 +1,5 @@
 import { createAuditId, sanitizeBrand } from "./brand";
+import { detectBusinessProfile } from "./business";
 import { checksRunFor, runPageChecks, runSiteChecks } from "./checks";
 import { AUDIT_USER_AGENT } from "./http";
 import { generatePitch } from "./pitch";
@@ -40,9 +41,10 @@ export function composeAudit(input: ComposeAuditInput): Audit {
 
   emit(stageEvent("analyzing", "Running the deterministic check suite", 82));
 
+  const business = detectBusinessProfile(pages);
   const findings = [
-    ...pages.flatMap((page) => runPageChecks(page)),
-    ...runSiteChecks(pages, context),
+    ...pages.flatMap((page) => runPageChecks(page, business)),
+    ...runSiteChecks(pages, context, business),
   ];
   const checksRun = checksRunFor(pages.length);
 
