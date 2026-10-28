@@ -17,7 +17,7 @@ import { AuditForm } from "@/components/audit-form";
 import sampleJson from "@/data/sample-audit.json";
 import type { Audit } from "@/lib/audit/types";
 import { mailtoHref } from "@/lib/contact";
-import { AGENCY_PILOT } from "@/lib/offer";
+import { AGENCY_INTRO, AGENCY_PILOT } from "@/lib/offer";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -793,30 +793,33 @@ export default function Home() {
                 Clinch is the engine. I can run it for you.
               </h2>
               <p className="mt-5 max-w-xl text-sm leading-relaxed text-ink/65">
-                Send {AGENCY_PILOT.dossierCount} prospect URLs and your brand
-                details. In {AGENCY_PILOT.turnaroundHours} hours you get{" "}
-                {AGENCY_PILOT.dossierCount} white-label dossiers and the
-                outreach to send them — reviewed by me,
-                delivered under your name. €{AGENCY_PILOT.priceEur} for the
-                batch, €{AGENCY_PILOT.perDossierEur} per dossier, paid once.
+                Start with one prospect: a one-time first-audit pilot for €
+                {AGENCY_INTRO.priceEur} gets one manually reviewed white-label
+                dossier with evidence-backed findings, a personalized pitch
+                kit, and a 30/60/90 plan in {AGENCY_INTRO.turnaroundHours}{" "}
+                hours. The standard package covers {AGENCY_PILOT.dossierCount}{" "}
+                separate prospect websites for €{AGENCY_PILOT.priceEur} — €
+                {AGENCY_PILOT.perDossierEur} per dossier, each with the same
+                deliverables. Both are paid once, under your name.
               </p>
               <p className="mt-4 max-w-xl font-mono text-[10px] uppercase leading-relaxed tracking-[0.12em] text-ink/50">
-                You send: {AGENCY_PILOT.dossierCount} public URLs, logo or
-                wordmark, accent hex, sender name, reply-to email, booking link.
+                You send: {AGENCY_INTRO.dossierCount} or{" "}
+                {AGENCY_PILOT.dossierCount} public URLs, logo or wordmark,
+                accent hex, sender name, reply-to email, booking link.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
                   href="/for-agencies"
                   className="group inline-flex items-center gap-2 bg-ink px-5 py-3 text-sm text-bone transition hover:bg-ink-raised"
                 >
-                  See the agency pilot
+                  See both offers
                   <ArrowRight
                     className="size-4 transition-transform group-hover:translate-x-0.5"
                     aria-hidden
                   />
                 </Link>
                 <a
-                  href={mailtoHref("Question about the Clinch agency pilot")}
+                  href={mailtoHref("Question about Clinch audits")}
                   className="inline-flex items-center gap-2 border border-ink/25 px-5 py-3 text-sm text-ink/75 transition hover:border-ink/60 hover:text-ink"
                 >
                   <Mail className="size-4" aria-hidden />
@@ -826,12 +829,9 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-3 gap-px border border-ink/20 bg-ink/15">
               {[
-                [
-                  String(AGENCY_PILOT.dossierCount).padStart(2, "0"),
-                  "dossiers",
-                ],
+                [`€${AGENCY_INTRO.priceEur}`, "one-audit pilot"],
+                [`€${AGENCY_PILOT.priceEur}`, "five-audit package"],
                 [`${AGENCY_PILOT.turnaroundHours}h`, "turnaround"],
-                [`€${AGENCY_PILOT.priceEur}`, "fixed fee"],
               ].map(([value, label]) => (
                 <div key={label} className="bg-bone p-4 sm:p-5">
                   <p className="display text-3xl leading-none sm:text-4xl">

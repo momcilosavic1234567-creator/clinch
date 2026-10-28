@@ -1,3 +1,9 @@
+export const AGENCY_INTRO = {
+  dossierCount: 1,
+  priceEur: 49,
+  turnaroundHours: 48,
+} as const;
+
 export const AGENCY_PILOT = {
   dossierCount: 5,
   priceEur: 300,
@@ -14,7 +20,7 @@ export const AGENCY_DELIVERABLES = [
 ] as const;
 
 export const AGENCY_INPUTS = [
-  "Five public prospect URLs",
+  "One public prospect URL for the pilot, or five for the package",
   "Your logo (PNG or JPG) or a clean wordmark",
   "Accent colour as a hex value",
   "Sender name and reply-to email",
