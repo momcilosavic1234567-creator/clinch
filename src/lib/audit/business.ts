@@ -19,6 +19,10 @@ interface TypeRule {
   // Words like "software" are too broad to infer from navigation alone; the
   // site has to describe itself that way in its title, description, or CTA.
   requiresSignature?: boolean;
+  // Retail vocabulary (checkout, collections, returns) appears on agencies and
+  // case studies too; a cart/stock mechanic, or a platform marker plus
+  // storefront copy, is needed before calling a site an online shop.
+  requiresStorefront?: boolean;
 }
 
 const RULES: TypeRule[] = [
@@ -62,6 +66,7 @@ const RULES: TypeRule[] = [
   },
   {
     type: "ecommerce",
+    requiresStorefront: true,
     signature: [
       /\badd to (?:cart|bag)\b/,
       /\bshopping (?:cart|bag|basket)\b/,
@@ -331,6 +336,13 @@ export function detectBusinessProfile(
     const claimEvidence = signatures > 0 || strongInClaims > 0;
     // A platform marker (e.g. Shopify) corroborates a shop but cannot create one.
     const techCorroborated = techHit && claimEvidence;
+
+    if (rule.requiresStorefront) {
+      const mechanics = countHits(rule.signature, text.allParts);
+      const hasStorefront =
+        mechanics > 0 || (techHit && strongInClaims > 0);
+      if (!hasStorefront) continue;
+    }
 
     const score =
       signatureScore +

@@ -115,6 +115,53 @@ describe("business type detection", () => {
     expect(fix).not.toMatch(/shop|cart|collection/i);
   });
 
+  it("keeps IDEO's live content out of e-commerce", () => {
+    const ideo = makePage(
+      `<html lang="en"><head>
+         <title>IDEO : Human-centered design</title>
+         <meta name="description" content="We envision new businesses and brands, and we design the experiences and capabilities that bring them to life.">
+       </head><body>
+         <nav>
+           <a href="/about">About IDEO</a>
+           <a href="/design-services">Services</a>
+           <a href="/work">Case studies</a>
+           <a href="/studios">Studios</a>
+         </nav>
+         <a href="/work/store-of-the-future">Store of the future</a>
+         <a href="/work/in-store-experience">An in-store experience for the digital era</a>
+         <a href="/work/retail-collections">Collections for a heritage retailer</a>
+         <a href="/work/grocery">Products for a national grocery chain</a>
+         <a href="https://www.ideo.com/ideo-u">IDEO U courses</a>
+         <a href="https://www.ideo.com/ideo-iq">The IDEO IQ subscription</a>
+         <p>${"Human-centered design, strategy, and prototyping. ".repeat(30)}</p>
+       </body></html>`,
+    );
+
+    const profile = detectBusinessProfile([ideo]);
+    expect(profile.type).not.toBe("ecommerce");
+    expect(["agency", "unknown"]).toContain(profile.type);
+    expect(ctaFixFor(ideo)).not.toMatch(
+      /shop|cart|collection|product catalogue/i,
+    );
+  });
+
+  it("requires storefront evidence, not retail vocabulary in the copy", () => {
+    const retailStudio = makePage(
+      `<html lang="en"><head>
+         <title>Ridgeline Retail Studio</title>
+         <meta name="description" content="We help retailers with checkout, collections, and free shipping.">
+       </head><body>
+         <nav><a href="/work">Case studies</a><a href="/clients">Clients</a></nav>
+         <a href="/work/returns">A simpler returns process for a fashion brand</a>
+         <p>${"Research, service design, and delivery support. ".repeat(30)}</p>
+       </body></html>`,
+    );
+
+    const profile = detectBusinessProfile([retailStudio]);
+    expect(profile.type).toBe("unknown");
+    expect(ctaFixFor(retailStudio)).toBe(UNKNOWN_PROFILE.ctaFix);
+  });
+
   it("recognises a shop from its storefront navigation without a platform marker", () => {
     const shop = makePage(
       `<html lang="en"><head>
